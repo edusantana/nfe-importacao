@@ -3,6 +3,17 @@ require 'rails_helper'
 RSpec.describe Nota, type: :model do
   
 
+  describe '#user' do
+    context 'Uma nota deve pertencer a um usuário', :wip do
+      #let(:user){create(:user)}
+      it 'Não é possível salvar nota sem usuário' do
+        n = Nota.new(titulo: 'titulo qualquer')
+        expect {n.save}.to raise_error
+        expect(n.id).to be_nil
+      end
+    end
+  end
+
 
   describe '#planilha_itens' do
     let(:nota){create(:nota)}

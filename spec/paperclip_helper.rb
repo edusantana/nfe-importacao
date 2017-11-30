@@ -3,5 +3,5 @@ RSpec.configure do |config|
 end
 
 def arquivo(file)
-  File.new("#{Rails.root}/spec/fixtures/files/#{file}")
+  File.new("#{Rails.root}/spec/fixtures/files/#{file}")  
 end
