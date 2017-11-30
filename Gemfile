@@ -56,3 +56,6 @@ gem 'devise'
 gem "paperclip", "~> 5.0.0"
 
 gem "rails-i18n"
+
+gem "roo", "~> 2.7.0"
+

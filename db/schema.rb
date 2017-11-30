@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171128214519) do
+ActiveRecord::Schema.define(version: 20171129201646) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 20171128214519) do
     t.string "planilha_itens_content_type"
     t.integer "planilha_itens_file_size"
     t.datetime "planilha_itens_updated_at"
+    t.float "cambio"
     t.index ["user_id"], name: "index_notas_on_user_id"
   end
 
