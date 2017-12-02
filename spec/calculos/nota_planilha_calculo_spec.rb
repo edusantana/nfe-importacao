@@ -35,14 +35,14 @@ RSpec.describe NotaPlanilhaCalculo do
 
         expect(dados['totais']['despesas_aduaneiras']).to eq(1668.46)
         
-        expect(dados['itens'][0]['despesas_aduaneiras']).to be_within(0.01).of(58.75)
+        expect(dados['itens'][0]['despesas_aduaneiras']).to  be_within(0.01).of(58.75)
         expect(dados['itens'][12]['despesas_aduaneiras']).to be_within(0.01).of(49.35)
         
-        expect(dados['itens'][0]['BC_II']).to be_within(0.01).of(137.93)
+        expect(dados['itens'][0]['BC_II']).to  be_within(0.01).of(137.93)
         expect(dados['itens'][12]['BC_II']).to be_within(0.01).of(115.86)
         
         
-        expect(dados['itens'][0]['II']).to eq(0.18)
+        expect(dados['itens'][0]['II']).to  eq(0.18)
         expect(dados['itens'][12]['II']).to eq(0.18)
         
         expect(dados['itens'][0]['valor_II']).to be_within(0.01).of(24.83)
@@ -50,10 +50,10 @@ RSpec.describe NotaPlanilhaCalculo do
 
         expect(dados['totais']['valor_II']).to be_within(0.01).of(705.11)
 
-        expect(dados['itens'][0]['BC_IPI']).to be_within(0.01).of( 162.76 )
+        expect(dados['itens'][0]['BC_IPI']).to  be_within(0.01).of( 162.76 )
         expect(dados['itens'][12]['BC_IPI']).to be_within(0.01).of( 136.72 )
 
-        expect(dados['itens'][0]['IPI']).to be_within(0.01).of( 0.05 )
+        expect(dados['itens'][0]['IPI']).to  be_within(0.01).of( 0.05 )
         expect(dados['itens'][12]['IPI']).to be_within(0.01).of( 0.05 )
 
         
@@ -65,7 +65,55 @@ RSpec.describe NotaPlanilhaCalculo do
 
         expect(dados['itens'][0]['BC_PIS_COFINS']).to  be_within(0.01).of( 137.93 )
         expect(dados['itens'][12]['BC_PIS_COFINS']).to be_within(0.01).of( 115.86 )
-        #expect(dados['totais']['BC_PIS_COFINS']).to be_within(0.01).of(3917.31)
+        expect(dados['totais']['BC_PIS_COFINS']).to    be_within(0.01).of( 3917.31)
+
+
+        expect(dados['itens'][0]['PIS']).to  eq( 0.021 )
+        expect(dados['itens'][12]['PIS']).to eq( 0.021 )
+
+        expect(dados['itens'][0]['valor_PIS']).to  be_within(0.01).of( 2.90  )
+        expect(dados['itens'][12]['valor_PIS']).to be_within(0.01).of( 2.43  )
+        expect(dados['totais']['valor_PIS']).to be_within(0.01).of(82.26)
+
+        expect(dados['itens'][0]['COFINS']).to  eq(0.1065)
+        expect(dados['itens'][12]['COFINS']).to eq(0.1065)
+
+        expect(dados['itens'][0]['valor_COFINS']).to  be_within(0.01).of( 14.69 )
+        expect(dados['itens'][12]['valor_COFINS']).to be_within(0.01).of( 12.34 )
+        expect(dados['totais']['valor_COFINS']).to be_within(0.01).of(417.19)
+
+        #expect(dados['itens'][0]['BC_ICMS_FINAL']).to  be_within(0.01).of( 239.07 )
+        #expect(dados['itens'][12]['BC_ICMS_FINAL']).to be_within(0.01).of( 200.82 )
+        #expect(dados['totais']['BC_ICMS_FINAL']).to be_within(0.01).of(6_789.65)
+        
+        
+        expect(dados['itens'][0]['valor_total_produto']).to  be_within(0.01).of(79.19)
+        expect(dados['itens'][12]['valor_total_produto']).to be_within(0.01).of(66.52)
+        expect(dados['totais']['valor_total_produto']).to be_within(0.01).of(2_248.85)
+        
+        expect(dados['itens'][0]['valor_unitario_real']).to  be_within(0.000001).of(15.837000)
+        expect(dados['itens'][12]['valor_unitario_real']).to be_within(0.000001).of(6.651540)
+        
+        expect(dados['itens'][0]['rateio_despesas_acessorias']).to  be_within(0.0000001).of(0.03521133024)
+        expect(dados['itens'][12]['rateio_despesas_acessorias']).to be_within(0.0000001).of(0.02957751740)
+        expect(dados['totais']['rateio_despesas_acessorias']).to be_within(0.0000001).of(1.0)
+        
+        expect(dados['itens'][0]['despesas_acessorias']).to  be_within(0.0001).of(7.5528303)
+        expect(dados['itens'][12]['despesas_acessorias']).to be_within(0.0001).of(6.3443775)
+        expect(dados['totais']['despesas_acessorias']).to be_within(0.0001).of(214.50)
+        
+        expect(dados['itens'][0]['ICMS']).to  eq(0.18)
+        expect(dados['itens'][12]['ICMS']).to eq(0.18)
+
+        expect(dados['itens'][0]['valor_ICMS']).to  be_within(0.0001).of(43.03)
+        expect(dados['itens'][12]['valor_ICMS']).to be_within(0.0001).of(36.15)
+        expect(dados['totais']['valor_ICMS']).to be_within(0.0001).of(1_222.13)
+        
+        
+        
+        
+        
+        
         
         
         

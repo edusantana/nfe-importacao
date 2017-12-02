@@ -21,6 +21,15 @@ class NotaPlanilhaCalculo
     calcula_BC_IPI
     calcula_valor_IPI
     calcula_BC_PIS_COFINS
+    calcula_valor_PIS
+    calcula_COFINS
+    calcula_valor_total_produto
+    calcula_valor_unitario_real
+    calcula_rateio_despesas_acessorias
+    calcula_despesas_acessorias
+    
+    #calcula_BC_ICMS_FINAL
+
   
     
     dados
@@ -44,7 +53,6 @@ class NotaPlanilhaCalculo
     sheet.each(item: 'Item', II: 'II', :headers => true) do |hash|
       itens << hash
     end
-    #byebug
 
     itens.delete_at(0)
     dados['itens'] = itens
@@ -53,7 +61,7 @@ class NotaPlanilhaCalculo
   def ler_extra
     sheet = @planilha.sheet('Extra')
     extra = {}
-    cabecalhos = {'Câmbio' => 'cambio', 'TOTAL FRETE'=>'frete'}
+    cabecalhos = {'Câmbio' => 'cambio', 'TOTAL FRETE'=>'frete', 'TAXA DE UTILIZACAO DO SISCOMEX' => 'taxa_siscomex'}
     sheet.each do |linha|
       key = cabecalhos[linha[0]]
       extra[key] = linha[1]
@@ -143,4 +151,78 @@ class NotaPlanilhaCalculo
     dados['totais']['BC_PIS_COFINS'] = total
   end
 
+  def calcula_valor_PIS
+    total = 0
+    dados['itens'].each do |item|
+      valor = item['BC_II']*item['PIS']
+      
+      item['valor_PIS'] = valor
+      total += valor
+    end
+    dados['totais']['valor_PIS'] = total
+  end
+
+  def calcula_COFINS
+    total = 0
+    dados['itens'].each do |item|
+      valor = item['BC_II']*item['COFINS']      
+      item['valor_COFINS'] = valor
+      total += valor
+    end
+    dados['totais']['valor_COFINS'] = total
+  end
+
+
+  def calcula_BC_ICMS_FINAL
+    ### FIXME
+    total = 0
+    dados['itens'].each do |item|
+      valor = (item['despesas_aduaneiras']+item['valor_II']+item['valor_IPI']+item['valor_PIS']+item['COFINS'])/(1-item['ICMS'])
+      item['BC_ICMS_FINAL'] = valor
+      total += valor
+    end
+    dados['totais']['BC_ICMS_FINAL'] = total
+  end
+
+  def calcula_valor_total_produto
+    total = 0
+    dados['itens'].each do |item|
+      valor = item['valor_aduaneiro_em_reais']
+      item['valor_total_produto'] = valor
+      total += valor
+    end
+    dados['totais']['valor_total_produto'] = total
+  end
+
+  def calcula_valor_unitario_real
+    total = 0
+    dados['itens'].each do |item|
+      valor = item['valor_total_produto']/item['Quantidade']
+      item['valor_unitario_real'] = valor
+      total += valor
+    end
+    dados['totais']['valor_unitario_real'] = total    
+  end
+
+  def calcula_rateio_despesas_acessorias
+    key = 'rateio_despesas_acessorias'
+    total = 0
+    dados['itens'].each do |item|
+      valor = item['valor_total_produto']/dados['totais']['valor_total_produto']
+      item[key] = valor
+      total += valor
+    end
+    dados['totais'][key] = total
+  end
+
+  def calcula_despesas_acessorias
+    key = 'despesas_acessorias'
+    total = dados['taxa_siscomex']
+    dados['itens'].each do |item|
+      valor = total*item['rateio_despesas_acessorias']
+      item[key] = valor
+    end
+    dados['totais'][key] = total
+  end
+    
 end
