@@ -31,6 +31,8 @@ class NotaPlanilhaCalculo
     calcula_BC_ICMS_FINAL
     calcula_total_despesas_acessorias
     calcula_total_despesas_sem_frete
+    calcula_total_frete
+    calcula_ICMS_final
 
   
     
@@ -253,6 +255,28 @@ class NotaPlanilhaCalculo
     total = 0
     dados['itens'].each do |item|
       valor = item['total_despesas_acessorias']-item['despesas_aduaneiras']
+      item[key] = valor
+      total += valor
+    end
+    dados['totais'][key] = total
+  end
+
+  def calcula_total_frete
+    key = 'total_frete'
+    total = 0
+    dados['itens'].each do |item|
+      valor = item['total_despesas_acessorias']-item['total_despesas_sem_frete']
+      item[key] = valor
+      total += valor
+    end
+    dados['totais'][key] = total
+  end
+
+  def calcula_ICMS_final
+    key = 'ICMS_final'
+    total = 0
+    dados['itens'].each do |item|
+      valor = item['BC_ICMS_FINAL']*item['ICMS']
       item[key] = valor
       total += valor
     end
