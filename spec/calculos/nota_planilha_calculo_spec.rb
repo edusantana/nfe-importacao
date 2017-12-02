@@ -32,8 +32,11 @@ RSpec.describe NotaPlanilhaCalculo do
         expect(dados['valor_aduaneiro_em_reais'][12]).to be_within(0.01).of(66.52)
 
         expect(dados['totais']['valor_aduaneiro_em_reais']).to be_within(0.01).of(2248.85)
+
+        expect(dados['totais']['despesas_aduaneiras']).to eq(1668.46)
         
-        
+        expect(dados['despesas_aduaneiras'][0]).to be_within(0.01).of(58.75)
+        expect(dados['despesas_aduaneiras'][12]).to be_within(0.01).of(49.35)
         
         
         
