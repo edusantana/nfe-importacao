@@ -41,7 +41,7 @@ RSpec.describe Nota, type: :model do
     context 'Depois que as planilhas foram inseridas' do
       before do
       end
-      it 'calcula os valores dos itens e salva os resultados' do
+      it 'calcula os valores dos itens e salva os resultados no hash dados' do
         expect(nota.itens).to be_nil
         nota.calcula
         expect(nota.itens[0]).to include(item: 'item1',

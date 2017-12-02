@@ -2,5 +2,8 @@
 
 <%= @nota.titulo %>
 
+
+<%= link_to 'Baixar TXT para gerar nota fiscal', download_txt_nota_path(@nota) %> |
+
 <%= link_to 'Editar', edit_nota_path(@nota) %> |
 <%= link_to 'Voltar', notas_path %>

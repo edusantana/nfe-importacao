@@ -1,5 +1,5 @@
 class NotasController < ApplicationController
-  before_action :set_nota, only: [:show, :edit, :update, :destroy]
+  before_action :set_nota, only: [:show, :edit, :update, :destroy, :download_txt]
 
   # GET /notas
   # GET /notas.json
@@ -10,6 +10,12 @@ class NotasController < ApplicationController
   # GET /notas/1
   # GET /notas/1.json
   def show
+  end
+
+  # Retorna txt da nota
+  # GET /notas/1/download_txt
+  def download_txt
+    send_data @nota.to_txt, type: 'text/plain', filename: "nota-fiscal-#{@nota.id}.txt"
   end
 
   # GET /notas/new
@@ -30,7 +36,7 @@ class NotasController < ApplicationController
 
     respond_to do |format|
       if @nota.save
-        format.html { redirect_to @nota, notice: 'Nota was successfully created.' }
+        format.html { redirect_to @nota, notice: 'Nota foi criada com sucesso.' }
         format.json { render :show, status: :created, location: @nota }
       else
         format.html { render :new }
@@ -58,7 +64,7 @@ class NotasController < ApplicationController
   def destroy
     @nota.destroy
     respond_to do |format|
-      format.html { redirect_to notas_url, notice: 'Nota was successfully destroyed.' }
+      format.html { redirect_to notas_url, notice: 'Nota foi apagada com sucesso.' }
       format.json { head :no_content }
     end
   end
