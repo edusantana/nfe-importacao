@@ -18,6 +18,9 @@ class NotaPlanilhaCalculo
     calcula_despesas_aduaneiras
     calcula_BC_II
     calcula_valor_II
+    calcula_BC_IPI
+    calcula_valor_IPI
+    calcula_BC_PIS_COFINS
   
     
     dados
@@ -100,11 +103,44 @@ class NotaPlanilhaCalculo
   end
 
   def calcula_valor_II
+    total = 0
     dados['itens'].each_with_index do |item,i|
       valor = item['BC_II'] * item['II']
       
       item['valor_II'] = valor
+      total += valor
+    end
+    dados['totais']['valor_II'] = total
+  end
+
+  def calcula_BC_IPI
+    dados['itens'].each do |item|
+      valor = item['BC_II'] + item['valor_II']
+      
+      item['BC_IPI'] = valor
     end
   end
-  
+
+  def calcula_valor_IPI
+    total = 0
+    dados['itens'].each do |item|
+      valor = item['BC_IPI'] * item['IPI']
+      
+      item['valor_IPI'] = valor
+      total += valor
+    end
+    dados['totais']['valor_IPI'] = total
+  end
+
+  def calcula_BC_PIS_COFINS
+    total = 0
+    dados['itens'].each do |item|
+      valor = item['BC_II']
+      
+      item['BC_PIS_COFINS'] = valor
+      total += valor
+    end
+    dados['totais']['BC_PIS_COFINS'] = total
+  end
+
 end

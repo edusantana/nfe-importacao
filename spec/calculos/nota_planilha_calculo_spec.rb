@@ -45,8 +45,32 @@ RSpec.describe NotaPlanilhaCalculo do
         expect(dados['itens'][0]['II']).to eq(0.18)
         expect(dados['itens'][12]['II']).to eq(0.18)
         
-        #expect(dados['itens'][0]['valor_II']).to be_within(0.01).of(24.83)
-        #expect(dados['itens'][12]['valor_II']).to be_within(0.01).of(20.86)
+        expect(dados['itens'][0]['valor_II']).to be_within(0.01).of(24.83)
+        expect(dados['itens'][12]['valor_II']).to be_within(0.01).of(20.86)
+
+        expect(dados['totais']['valor_II']).to be_within(0.01).of(705.11)
+
+        expect(dados['itens'][0]['BC_IPI']).to be_within(0.01).of( 162.76 )
+        expect(dados['itens'][12]['BC_IPI']).to be_within(0.01).of( 136.72 )
+
+        expect(dados['itens'][0]['IPI']).to be_within(0.01).of( 0.05 )
+        expect(dados['itens'][12]['IPI']).to be_within(0.01).of( 0.05 )
+
+        
+        expect(dados['itens'][0]['valor_IPI']).to  be_within(0.01).of( 8.14 )
+        expect(dados['itens'][12]['valor_IPI']).to be_within(0.01).of( 6.84 )
+        
+        expect(dados['totais']['valor_IPI']).to be_within(0.01).of(231.12)
+        
+
+        expect(dados['itens'][0]['BC_PIS_COFINS']).to  be_within(0.01).of( 137.93 )
+        expect(dados['itens'][12]['BC_PIS_COFINS']).to be_within(0.01).of( 115.86 )
+        #expect(dados['totais']['BC_PIS_COFINS']).to be_within(0.01).of(3917.31)
+        
+        
+        
+        
+        
 
       end
 
