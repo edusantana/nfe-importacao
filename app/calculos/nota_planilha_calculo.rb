@@ -33,8 +33,7 @@ class NotaPlanilhaCalculo
     calcula_total_despesas_sem_frete
     calcula_total_frete
     calcula_ICMS_final
-
-  
+    calcula_total_nf
     
     dados
   end
@@ -280,6 +279,14 @@ class NotaPlanilhaCalculo
       item[key] = valor
       total += valor
     end
+    dados['totais'][key] = total
+  end
+
+  def calcula_total_nf
+    key = 'total_nf'
+    t = dados['totais']
+    total = t['valor_aduaneiro_em_reais']+t['valor_IPI']+t['total_despesas_acessorias']+t['valor_II']
+    
     dados['totais'][key] = total
   end
 

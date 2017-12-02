@@ -125,14 +125,10 @@ RSpec.describe NotaPlanilhaCalculo do
         expect(dados['itens'][12]['ICMS_final']).to be_within(0.01).of( 36.15 )
         expect(dados['totais']['ICMS_final']).to be_within(0.01).of( 1_222.13 )
         
+        expect(dados['totais']['total_nf']).to be_within(0.03).of( 6_789.62 )
         
-        
-        
-        
-        
-        
-        
-        
+        # Salva dados como json para inspeção:
+        # open('dados.json', 'w') { |f| f << JSON.pretty_generate(dados) } 
 
       end
 
