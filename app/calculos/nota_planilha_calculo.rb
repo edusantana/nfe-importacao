@@ -16,6 +16,8 @@ class NotaPlanilhaCalculo
     calcula_valor_aduaneiro_em_modea_estrangeira
     calcula_valor_aduaneiro_em_reais
     calcula_despesas_aduaneiras
+    calcula_BC_II
+    calcula_valor_II
   
     
     dados
@@ -36,9 +38,10 @@ class NotaPlanilhaCalculo
 
     sheet = @planilha.sheet('Itens')
 
-    sheet.each(item: 'Item', :headers => true) do |hash|
+    sheet.each(item: 'Item', II: 'II', :headers => true) do |hash|
       itens << hash
     end
+    #byebug
 
     itens.delete_at(0)
     dados['itens'] = itens
@@ -56,21 +59,20 @@ class NotaPlanilhaCalculo
   end
 
   def calcula_valor_aduaneiro_em_modea_estrangeira
-    dados['valor_aduaneiro_em_modea_estrangeira'] = []
+    
     total = 0
     dados['itens'].each_with_index do |item,i|
       valor = item['Preço'] * item['Quantidade']
-      dados['valor_aduaneiro_em_modea_estrangeira'][i] = valor
+      item['valor_aduaneiro_em_modea_estrangeira'] = valor
       total += valor
     end
     dados['totais']['valor_aduaneiro_em_modea_estrangeira'] = total
   end
   def calcula_valor_aduaneiro_em_reais
-    dados['valor_aduaneiro_em_reais'] = []
     total = 0
-    dados['valor_aduaneiro_em_modea_estrangeira'].each_with_index do |item,i|
-      valor = (item * dados['cambio'])
-      dados['valor_aduaneiro_em_reais'] << valor
+    dados['itens'].each_with_index do |item,i|
+      valor = (item['valor_aduaneiro_em_modea_estrangeira'] * dados['cambio'])
+      item['valor_aduaneiro_em_reais'] = valor
       total += valor
     end
     dados['totais']['valor_aduaneiro_em_reais'] = total
@@ -81,13 +83,28 @@ class NotaPlanilhaCalculo
     total_despesas_aduaneiras = dados['frete']
     total_valor_aduaneiro_em_reais = dados['totais']['valor_aduaneiro_em_reais']
     
-    dados['despesas_aduaneiras'] = []
-    dados['valor_aduaneiro_em_reais'].each_with_index do |item,i|
-      valor = (item * total_despesas_aduaneiras) / total_valor_aduaneiro_em_reais
-      dados['despesas_aduaneiras'] << valor
+    dados['itens'].each_with_index do |item,i|
+      valor = (item['valor_aduaneiro_em_reais'] * total_despesas_aduaneiras) / total_valor_aduaneiro_em_reais
+      item['despesas_aduaneiras'] = valor
     end
 
     dados['totais']['despesas_aduaneiras'] = total_despesas_aduaneiras
 
   end
+
+  def calcula_BC_II
+    dados['itens'].each_with_index do |item,i|
+      valor = item['despesas_aduaneiras']+item['valor_aduaneiro_em_reais']
+      item['BC_II'] = valor
+    end
+  end
+
+  def calcula_valor_II
+    dados['itens'].each_with_index do |item,i|
+      valor = item['BC_II'] * item['II']
+      
+      item['valor_II'] = valor
+    end
+  end
+  
 end
