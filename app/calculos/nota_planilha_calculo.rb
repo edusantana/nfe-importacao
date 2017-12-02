@@ -27,8 +27,8 @@ class NotaPlanilhaCalculo
     calcula_valor_unitario_real
     calcula_rateio_despesas_acessorias
     calcula_despesas_acessorias
-    
-    #calcula_BC_ICMS_FINAL
+    calcula_valor_ICMS
+    calcula_BC_ICMS_FINAL
 
   
     
@@ -172,18 +172,6 @@ class NotaPlanilhaCalculo
     dados['totais']['valor_COFINS'] = total
   end
 
-
-  def calcula_BC_ICMS_FINAL
-    ### FIXME
-    total = 0
-    dados['itens'].each do |item|
-      valor = (item['despesas_aduaneiras']+item['valor_II']+item['valor_IPI']+item['valor_PIS']+item['COFINS'])/(1-item['ICMS'])
-      item['BC_ICMS_FINAL'] = valor
-      total += valor
-    end
-    dados['totais']['BC_ICMS_FINAL'] = total
-  end
-
   def calcula_valor_total_produto
     total = 0
     dados['itens'].each do |item|
@@ -224,5 +212,27 @@ class NotaPlanilhaCalculo
     end
     dados['totais'][key] = total
   end
-    
+
+  def calcula_valor_ICMS
+    key = 'valor_ICMS'
+    total = 0
+    dados['itens'].each do |item|
+      valor = ((item['valor_aduaneiro_em_reais']+item['despesas_aduaneiras']+item['valor_II']+item['valor_IPI']+item['valor_PIS']+item['valor_COFINS']+item['despesas_acessorias'])/(1-item['ICMS']))*item['ICMS']
+      item[key] = valor
+      total += valor
+    end
+    dados['totais'][key] = total
+  end
+
+  def calcula_BC_ICMS_FINAL
+    key = 'BC_ICMS_FINAL'
+    total = 0
+    dados['itens'].each do |item|
+      valor = ((item['valor_total_produto']+item['despesas_acessorias']+item['valor_COFINS']+item['valor_PIS']+item['valor_IPI']+item['valor_II']+item['despesas_aduaneiras'])/(1-item['ICMS']))
+      item[key] = valor
+      total += valor
+    end
+    dados['totais'][key] = total
+  end
+
 end

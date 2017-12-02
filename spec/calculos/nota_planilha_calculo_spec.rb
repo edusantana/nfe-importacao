@@ -81,11 +81,7 @@ RSpec.describe NotaPlanilhaCalculo do
         expect(dados['itens'][0]['valor_COFINS']).to  be_within(0.01).of( 14.69 )
         expect(dados['itens'][12]['valor_COFINS']).to be_within(0.01).of( 12.34 )
         expect(dados['totais']['valor_COFINS']).to be_within(0.01).of(417.19)
-
-        #expect(dados['itens'][0]['BC_ICMS_FINAL']).to  be_within(0.01).of( 239.07 )
-        #expect(dados['itens'][12]['BC_ICMS_FINAL']).to be_within(0.01).of( 200.82 )
-        #expect(dados['totais']['BC_ICMS_FINAL']).to be_within(0.01).of(6_789.65)
-        
+      
         
         expect(dados['itens'][0]['valor_total_produto']).to  be_within(0.01).of(79.19)
         expect(dados['itens'][12]['valor_total_produto']).to be_within(0.01).of(66.52)
@@ -105,11 +101,15 @@ RSpec.describe NotaPlanilhaCalculo do
         expect(dados['itens'][0]['ICMS']).to  eq(0.18)
         expect(dados['itens'][12]['ICMS']).to eq(0.18)
 
-        expect(dados['itens'][0]['valor_ICMS']).to  be_within(0.0001).of(43.03)
-        expect(dados['itens'][12]['valor_ICMS']).to be_within(0.0001).of(36.15)
-        expect(dados['totais']['valor_ICMS']).to be_within(0.0001).of(1_222.13)
+        expect(dados['itens'][0]['valor_ICMS']).to  be_within(0.01).of(43.03)
+        expect(dados['itens'][12]['valor_ICMS']).to be_within(0.01).of(36.15)
+        expect(dados['totais']['valor_ICMS']).to be_within(0.01).of(1_222.13)
         
+        expect(dados['itens'][0]['BC_ICMS_FINAL']).to  be_within(0.01).of( 239.07 )
+        expect(dados['itens'][12]['BC_ICMS_FINAL']).to be_within(0.01).of( 200.82 )
+        expect(dados['totais']['BC_ICMS_FINAL']).to be_within(0.01).of(6_789.65)
         
+
         
         
         
