@@ -109,7 +109,15 @@ RSpec.describe NotaPlanilhaCalculo do
         expect(dados['itens'][12]['BC_ICMS_FINAL']).to be_within(0.01).of( 200.82 )
         expect(dados['totais']['BC_ICMS_FINAL']).to be_within(0.01).of(6_789.65)
         
+        expect(dados['itens'][0]['total_despesas_acessorias']).to  be_within(0.01).of( 126.92 )
+        expect(dados['itens'][12]['total_despesas_acessorias']).to be_within(0.01).of( 106.61 )
+        expect(dados['totais']['total_despesas_acessorias']).to be_within(0.01).of(3_604.55)
 
+        #expect(dados['itens'][0]['total_despesas_sem_frete']).to  be_within(0.01).of( 68.17 )
+        #expect(dados['itens'][12]['total_despesas_sem_frete']).to be_within(0.01).of( 57.26 )
+        #expect(dados['totais']['total_despesas_sem_frete']).to be_within(0.01).of(1_936.09)
+
+        
         
         
         

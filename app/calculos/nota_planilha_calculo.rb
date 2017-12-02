@@ -29,6 +29,8 @@ class NotaPlanilhaCalculo
     calcula_despesas_acessorias
     calcula_valor_ICMS
     calcula_BC_ICMS_FINAL
+    calcula_total_despesas_acessorias
+    #calcula_total_despesas_sem_frete
 
   
     
@@ -229,6 +231,28 @@ class NotaPlanilhaCalculo
     total = 0
     dados['itens'].each do |item|
       valor = ((item['valor_total_produto']+item['despesas_acessorias']+item['valor_COFINS']+item['valor_PIS']+item['valor_IPI']+item['valor_II']+item['despesas_aduaneiras'])/(1-item['ICMS']))
+      item[key] = valor
+      total += valor
+    end
+    dados['totais'][key] = total
+  end
+
+  def calcula_total_despesas_acessorias
+    key = 'total_despesas_acessorias'
+    total = 0
+    dados['itens'].each do |item|
+      valor = item['despesas_aduaneiras']+item['valor_PIS']+item['valor_COFINS']+item['valor_ICMS']+item['despesas_acessorias']
+      item[key] = valor
+      total += valor
+    end
+    dados['totais'][key] = total
+  end
+
+  def calcula_total_despesas_sem_frete
+    key = 'total_despesas_sem_frete'
+    total = 0
+    dados['itens'].each do |item|
+      valor = ((item['']+item['despesas_acessorias']+item['valor_COFINS']+item['valor_PIS']+item['valor_IPI']+item['valor_II']+item['despesas_aduaneiras'])/(1-item['ICMS']))
       item[key] = valor
       total += valor
     end
