@@ -37,24 +37,14 @@ RSpec.describe Nota, type: :model do
   end
   
   describe '#calcula' do
-    let(:nota){create(:nota, planilha_itens: arquivo('joao/planilha_itens.ods'), cambio: 3.1674)}
+    let(:nota){create(:nota, planilha_itens: arquivo('joao/planilha_itens.ods'))}
     context 'Depois que as planilhas foram inseridas' do
       before do
       end
       it 'calcula os valores dos itens e salva os resultados no hash dados' do
-        expect(nota.itens).to be_nil
+        expect(nota.dados).to be_empty
         nota.calcula
-        expect(nota.itens[0]).to include(item: 'item1',
-          preco_unitario_moeda_estrangeira: 5.0,
-          quatidade: 5.0,
-          valor_aduaneiro_moeda_estrangeira: 25.0,
-          valor_aduaneiro_em_reais: 79.19,
-          despesas_aduaneiras: 58.75,
-          bc2: 137.93 ,
-          percetual2: 0.18,
-          valor2: 24.83,
-          bc_ipi:  162.76
-        )
+        expect(nota.dados['totais']['total_nf']).to be_within(0.03).of( 6_789.62 )
       end
     end
   end

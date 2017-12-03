@@ -5,10 +5,11 @@ class Nota < ApplicationRecord
   
   attr_accessor :cambio
   attr_accessor :itens
+  attr_accessor :dados
   
   
   def calcula
-    self.itens = []
+    calculo = NotaPlanilhaCalculo.new(self)
     
     
   end
