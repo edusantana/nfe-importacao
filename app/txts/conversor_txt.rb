@@ -217,7 +217,17 @@ class ConversorTxt
               O07: {
                 # O07|CST|vIPI|
                 CST: '49',
-                vIPI: '8.14'
+                vIPI: '8.14',
+                O10: {
+                  # O10|vBC|pIPI|
+                  vBC: '',
+                  pIPI: ''
+                },
+                O11: {
+                  # O11|qUnid|vUnid|
+                  qUnid: '',
+                  vUnid: ''
+                }
               }
             }
           }
