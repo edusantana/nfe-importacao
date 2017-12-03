@@ -100,8 +100,40 @@ class ConversorTxt
         CEP: '00000000',
         cPais: '1600',
         xPais: 'CHINA, REPUBLICA POPULAR',
-        fone: ''        
-      }
+        fone: ''
+    },
+    H:{
+      # H|1|.|
+      # H|nItem|infAdProd|
+      [
+        nItem: '',
+        infAdProd: '',
+        I: {
+          #I|cProd|cEAN|xProd|NCM|EXTIPI|CFOP
+          cProd: '',
+          cEAN: '',
+          xProd: '',
+          NCM: '',
+          EXTIPI: '',
+          CFOP: '',
+          uCom: '',
+          qCom: '',
+          vUnCom: '',
+          vProd: '',
+          cEANTrib: '',
+          uTrib: '',
+          qTrib: '',
+          vUnTrib: '',
+          vFrete: '',
+          vSeg: '',
+          vDesc: '',
+          vOutro: '',
+          indTot: '',
+          xPed: '',
+          nItemPed: '',
+          nFCI: ''
+        }
+      ]
     })
     
     @d = JSON.parse(nota.dados.to_json,object_class: OpenStruct)
