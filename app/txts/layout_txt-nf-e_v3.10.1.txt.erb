@@ -1,10 +1,12 @@
 NOTAFISCAL|1
 A|<%=@versao%>|<%=d.A03_id%>|
-B|<%=cUF%>|<%=d.B.cNF%>|<%=d.B.natOp%>|<%=d.B.indPag%>|<%=d.B.mod%>|<%=d.B.serie%>|<%=d.B.nNF%>|<%=d.B.dhEmi%>|<%=d.B.dhSaiEnt%>|<%=d.B.tpNF%>|<%=d.B.idDest%>|<%=d.B.cMunFG%>|<%=d.B.tpImp%>|<%=d.B.tpEmis%>|<%=d.B.cDV%>|<%=d.B.tpAmb%>|<%=d.B.finNFe%>|<%=d.B.indFinal%>|<%=d.B.indPres%>|<%=d.B.procEmi%>|<%=d.B.verProc%>|<%=d.B.dhCont%>|<%=d.B.xJust%>
-C|JOAO PAULO PINHEIRO BARONTO-ME|JOAO PAULO|271341432||||1|
-C02|14626983000180|
-C05|RUA AMINTAS MACHADO DE JESUS|126|SALA E|ROSAELZE|||SE|49100000|1058|BRASIL|7999895550|
-E|WENZHOU MINGBANG AUTO ACCESSORIES CO.,LTD.|9|||||
+B|<%=d.B.cUF%>|<%=d.B.cNF%>|<%=d.B.natOp%>|<%=d.B.indPag%>|<%=d.B.mod%>|<%=d.B.serie%>|<%=d.B.nNF%>|<%=d.B.dhEmi%>|<%=d.B.dhSaiEnt%>|<%=d.B.tpNF%>|<%=d.B.idDest%>|<%=d.B.cMunFG%>|<%=d.B.tpImp%>|<%=d.B.tpEmis%>|<%=d.B.cDV%>|<%=d.B.tpAmb%>|<%=d.B.finNFe%>|<%=d.B.indFinal%>|<%=d.B.indPres%>|<%=d.B.procEmi%>|<%=d.B.verProc%>|<%=d.B.dhCont%>|<%=d.B.xJust%>|
+C|<%= d.C.xNome %>|<%= d.C.xFant %>|<%= d.C.IE %>|<%= d.C.IEST %>|<%= d.C.IM %>|<%= d.C.CNAE %>|<%= d.C.CRT %>|
+<% if d.C.CNPJ %>
+C02|<%= d.C.CNPJ %>|
+<% end %>
+C05|<%= d.C.xLgr %>|<%= d.C.nro %>|<%= d.C.xCPL %>|<%= d.C.xBairro %>|<%= d.C.cMun %>|<%= d.C.xMun %>|<%= d.C.UF %>|<%= d.C.CEP %>|<%= d.C.cPais %>|<%= d.C.xPais %>|<%= d.C.fone %>|
+E|<%= d.E.xNome %>|<%= d.E.indIEDest %>|<%= d.E.IE %>|<%= d.E.ISUF %>|<%= d.E.IM %>|<%= d.E.email %>|
 E05|YUEXIU DISTRICT YONGFU ROAD|45|YONGFU INTERNATIONAL|...|9999999|Exterior|EX|00000000|1600|CHINA, REPUBLICA POPULAR||
 H|1|.|
 I|0000||OBL-12-01-01 - ACABAMENTO AUTOMOTIVO DA GRADE DIANTEIRA, LADO ESQUERDO E DIREITO EM PLASTICO ABS CROMADO COMPATIVEL C...|87082999||3102|PAR|5.0000|15.8370000000|79.19||PAR|5.0000|15.8370000000|58.75|||68.17|1||||
