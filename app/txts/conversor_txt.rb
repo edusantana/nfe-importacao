@@ -138,7 +138,75 @@ class ConversorTxt
                 NVE: ''
               }
             ],
-            I05c: {CEST: '0107500'} # 0 ou 1
+            I05c: [
+              {CEST: '0107500'}, # 0 ou 1
+            ],
+            I18: [ # [0 a 100]{
+              {
+                # I18|nDI|dDI|xLocDesemb|UFDesemb|dDesemb|tpViaTransp|vAFRMM|tpIntermedio|CNPJ|UFTerceiro|cExportador|
+                nDI: '1716607959',
+                dDI: '2017-09-28',
+                xLocDesemb: 'AEROPORTO INTERNACIONAL DE VIRACOPOS',
+                UFDesemb: 'SP',
+                dDesemb: '2017-09-28',
+                tpViaTransp: '4',
+                vAFRMM: '',
+                tpIntermedio: '1',
+                CNPJ: '14626983000180',
+                UFTerceiro: 'SP',
+                cExportador: '1192',
+                I25: [ # 0 a 500
+                  {
+                    # I25|1|1|1192|||
+                    # I25|nAdicao|nSeqAdicC|cFabricante|vDescDI|nDraw|
+                    nAdicao: '1',
+                    nSeqAdicC: '1',
+                    cFabricante: '1192',
+                    vDescDI: '',
+                    nDraw: ''
+                  }
+                ]
+              }
+            ]
+          },
+          M:{
+            # M|vTotTrib|
+            vTotTrib: '',
+            N:{
+              # N04|orig|CST|modBC|pRedBC|vBC|pICMS|vICMS|vICMSDeson|motDesICMS|
+              # N05|orig|CST|modBCST|pMVAST|pRedBCST|vBCST|pICMSST|vICMSST|vICMSDeson|motDesICMS|
+              # N06|orig|CST|vICMSDeson|motDesICMS|
+              # N07|orig|CST|modBC|pRedBC|vBC|pICMS|vICMSOp|pDif|vICMSDif|vICMS|
+              # N08|orig|CST|vBCSTRet|vICMSSTRet|
+              # N09|orig|CST|modBC|pRedBC|vBC|pICMS|vICMS|modBCST|pMVAST|pRedBCST|vBCST|pICMSST|vICMSST|vICMSDeson|motDesICMS|
+              # N10|orig|CST|modBC|vBC|pRedBC|pICMS|vICMS|modBCST|pMVAST|pRedBCST|vBCST|pICMSST|vICMSST|vICMSDeson|motDesICMS|
+              # N10a|orig|CST|modBC|vBC|pRedBC|pICMS|vICMS|modBCST|pMVAST|pRedBCST|vBCST|pICMSST|vICMSST|pBCOp|UFST|
+              # N10b|orig|CST|vBCSTRet|vICMSSTRet|vBCSTDest|vICMSSTDest|
+              # N10c|orig|CSOSN|pCredSN|vCredICMSSN|
+              # N10d|orig|CSOSN|
+              # N10e|orig|CSOSN|modBCST|pMVAST|pRedBCST|vBCST|pICMSST|vICMSST|pCredSN|vCredICMSSN|
+              # N10f|orig|CSOSN|modBCST|pMVAST|pRedBCST|vBCST|pICMSST|vICMSST|
+              # N10g|orig|CSOSN|vBCSTRet|vICMSSTRet|
+              N10h: {
+                # N10h|orig|CSOSN|modBC|vBC|pRedBC|pICMS|vICMS|modBCST|pMVAST|pRedBCST|vBCST|pICMSST|vICMSST|pCredSN|vCredICMSSN|
+                # N10h|1|900|3|239.07||18.00|43.03|||||||||
+                orig: '1',
+                CSOSN: '900',
+                modBC: '3',
+                vBC: '239.07',
+                pRedBC: '',
+                pICMS: '18.00',
+                vICMS: '43.03',
+                modBCST: '',
+                pMVAST: '',
+                pRedBCST: '',
+                vBCST: '',
+                pICMSST: '',
+                vICMSST: '',
+                pCredSN: '',
+                vCredICMSSN: ''                
+              }
+            }
           }
         }
       ]
