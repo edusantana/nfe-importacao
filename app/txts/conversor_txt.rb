@@ -205,14 +205,19 @@ class ConversorTxt
                 vICMSST: '',
                 pCredSN: '',
                 vCredICMSSN: ''                
-              },
-              O: { # [0 ou 1]
-                # O|clEnq|CNPJProd|cSelo|qSelo|cEnq|
-                clEnq: '',
-                CNPJProd: '',
-                cSelo: '',
-                qSelo: '',
-                cEnq: '999'
+              }
+            },
+            O: { # [0 ou 1]
+              # O|clEnq|CNPJProd|cSelo|qSelo|cEnq|
+              clEnq: '',
+              CNPJProd: '',
+              cSelo: '',
+              qSelo: '',
+              cEnq: '999',
+              O07: {
+                # O07|CST|vIPI|
+                CST: '49',
+                vIPI: '8.14'
               }
             }
           }
