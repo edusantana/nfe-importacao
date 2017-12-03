@@ -11,9 +11,11 @@ E|<%= d.E.xNome %>|<%= d.E.indIEDest %>|<%= d.E.IE %>|<%= d.E.ISUF %>|<%= d.E.IM
 E05|<%= d.E.xLgr %>|<%= d.E.nro %>|<%= d.E.xCpl %>|<%= d.E.xBairro %>|<%= d.E.cMun %>|<%= d.E.xMun %>|<%= d.E.UF %>|<%= d.E.CEP %>|<%= d.E.cPais %>|<%= d.E.xPais %>|<%= d.E.fone %>|
 <% d.H.each do |h| %>
 H|<%= h.nItem %>|<%= h.infAdProd %>|
+I|<%= h.I.cProd %>|<%= h.I.cEAN %>|<%= h.I.xProd %>|<%= h.I.NCM %>|<%= h.I.EXTIPI %>|<%= h.I.CFOP %>|<%= h.I.uCom %>|<%= h.I.qCom %>|<%= h.I.vUnCom %>|<%= h.I.vProd %>|<%= h.I.cEANTrib %>|<%= h.I.uTrib %>|<%= h.I.qTrib %>|<%= h.I.vUnTrib %>|<%= h.I.vFrete %>|<%= h.I.vSeg %>|<%= h.I.vDesc %>|<%= h.I.vOutro %>|<%= h.I.indTot %>|<%= h.I.xPed %>|<%= h.I.nItemPed %>|<%= h.I.nFCI %>|
+<%if h.I.I05c %>
+I05c|<%= h.I.I05c.CEST %>|
+<%end%>
 <% end %>
-I|0000||OBL-12-01-01 - ACABAMENTO AUTOMOTIVO DA GRADE DIANTEIRA, LADO ESQUERDO E DIREITO EM PLASTICO ABS CROMADO COMPATIVEL C...|87082999||3102|PAR|5.0000|15.8370000000|79.19||PAR|5.0000|15.8370000000|58.75|||68.17|1||||
-I05c|0107500|
 I18|1716607959|2017-09-28|AEROPORTO INTERNACIONAL DE VIRACOPOS|SP|2017-09-28|4||1|14626983000180|SP|1192|
 I25|1|1|1192|||
 M||

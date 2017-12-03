@@ -20,33 +20,32 @@ class ConversorTxt
     nota.dados.merge!({
       A03_id: 'NFe' + '28170914626983000180550010000073421',
       # B|cUF|cNF|natOp|indPag|mod|serie|nNF|dhEmi|dhSaiEnt|tpNF|idDest|cMunFG|tpImp|tpEmis|cDV|tpAmb|finNFe|indFinal|indPres|procEmi|verProc|dhCont|xJust|
-      B:
-        {
-          # cUF|cNF|natOp|indPag|mod|serie|nNF|dhEmi|dhSaiEnt|tpNF|idDest|cMunFG|tpImp|tpEmis|cDV|tpAmb|finNFe|indFinal|indPres|procEmi|verProc|dhCont|xJust
-          cUF: '28',
-          cNF: '',
-          natOp: 'COMPRA PARA COMERCIALIZACAO',
-          indPag: '0',
-          mod: '55',
-          serie: '1',
-          nNF: '7342',
-          dhEmi: '2017-09-28T00:00:00-03:00',
-          dhSaiEnt: '',
-          tpNF: '0',
-          idDest: '3',
-          cMunFG: '2806701',
-          tpImp: '1',
-          tpEmis: '1',
-          cDV: '',
-          tpAmb: '1',
-          finNFe: '1',
-          indFinal: '0',
-          indPres: '2',
-          procEmi: '3',
-          verProc: '3.20.55',
-          dhCont: '',
-          xJust: ''
-        },
+      B: {
+        # cUF|cNF|natOp|indPag|mod|serie|nNF|dhEmi|dhSaiEnt|tpNF|idDest|cMunFG|tpImp|tpEmis|cDV|tpAmb|finNFe|indFinal|indPres|procEmi|verProc|dhCont|xJust
+        cUF: '28',
+        cNF: '',
+        natOp: 'COMPRA PARA COMERCIALIZACAO',
+        indPag: '0',
+        mod: '55',
+        serie: '1',
+        nNF: '7342',
+        dhEmi: '2017-09-28T00:00:00-03:00',
+        dhSaiEnt: '',
+        tpNF: '0',
+        idDest: '3',
+        cMunFG: '2806701',
+        tpImp: '1',
+        tpEmis: '1',
+        cDV: '',
+        tpAmb: '1',
+        finNFe: '1',
+        indFinal: '0',
+        indPres: '2',
+        procEmi: '3',
+        verProc: '3.20.55',
+        dhCont: '',
+        xJust: ''
+      },
       C: {
         # C|JOAO PAULO PINHEIRO BARONTO-ME|JOAO PAULO|271341432||||1|
         # C|<%= d.C.xNome %>|<%= d.C.xFant %>|<%= d.C.IE %>|<%= d.C.IEST %>|<%= d.C.IM %>|<%= d.C.CNAE %>|<%= d.C.CRT %>|
@@ -101,39 +100,49 @@ class ConversorTxt
         cPais: '1600',
         xPais: 'CHINA, REPUBLICA POPULAR',
         fone: ''
-    },
-    H:{
-      # H|1|.|
-      # H|nItem|infAdProd|
-      [
-        nItem: '',
-        infAdProd: '',
-        I: {
-          #I|cProd|cEAN|xProd|NCM|EXTIPI|CFOP
-          cProd: '',
-          cEAN: '',
-          xProd: '',
-          NCM: '',
-          EXTIPI: '',
-          CFOP: '',
-          uCom: '',
-          qCom: '',
-          vUnCom: '',
-          vProd: '',
-          cEANTrib: '',
-          uTrib: '',
-          qTrib: '',
-          vUnTrib: '',
-          vFrete: '',
-          vSeg: '',
-          vDesc: '',
-          vOutro: '',
-          indTot: '',
-          xPed: '',
-          nItemPed: '',
-          nFCI: ''
+      },
+      H:[
+        {
+          nItem: '1',
+          infAdProd: '.',
+          I: {
+            # I|0000||OBL-12-01-01 - ACABAMENTO AUTOMOTIVO DA GRADE DIANTEIRA, LADO ESQUERDO E DIREITO EM PLASTICO ABS CROMADO COMPATIVEL C...|87082999||3102|PAR|5.0000|15.8370000000|79.19||PAR|5.0000|15.8370000000|58.75|||68.17|1||||
+            # I|cProd|cEAN|xProd|NCM|EXTIPI|CFOP|uCom|qCom|vUnCom|vProd|cEANTrib|uTrib|qTrib|vUnTrib|vFrete|vSeg|vDesc|vOutro|indTot|xPed|nItemPed|nFCI|
+            cProd: '0000',
+            cEAN: '',
+            xProd: 'OBL-12-01-01 - ACABAMENTO AUTOMOTIVO DA GRADE DIANTEIRA, LADO ESQUERDO E DIREITO EM PLASTICO ABS CROMADO COMPATIVEL C...',
+            NCM: '87082999',
+            EXTIPI: '',
+            CFOP: '3102',
+            uCom: 'PAR',
+            qCom: '5.0000',
+            vUnCom: '15.8370000000',
+            vProd: '79.19',
+            cEANTrib: '',
+            uTrib: 'PAR',
+            qTrib: '5.0000',
+            vUnTrib: '15.8370000000',
+            vFrete: '58.75',
+            vSeg: '',
+            vDesc: '',
+            vOutro: '68.17',
+            indTot: '1',
+            xPed: '',
+            nItemPed: '',
+            nFCI: '',
+            I05a: [
+              #[0 a 8]{
+              #  I05a|NVE|
+              #  }
+              {
+                NVE: ''
+              }
+            ],
+            I05c: {CEST: '0107500'} # 0 ou 1
+          }
         }
       ]
+
     })
     
     @d = JSON.parse(nota.dados.to_json,object_class: OpenStruct)
