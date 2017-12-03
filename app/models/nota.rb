@@ -10,8 +10,7 @@ class Nota < ApplicationRecord
   
   def calcula
     calculo = NotaPlanilhaCalculo.new(self)
-    
-    
+    @dados = calculo.calcula
   end
   
   def to_txt
