@@ -87,7 +87,20 @@ class ConversorTxt
         IE: '',
         ISUF: '',
         IM: '',
-        email: ''
+        email: '',
+        # E05|xLgr|nro|xCpl|xBairro|cMun|xMun|UF|CEP|cPais|xPais|fone|
+        # E05|YUEXIU DISTRICT YONGFU ROAD|45|YONGFU INTERNATIONAL|...|9999999|Exterior|EX|00000000|1600|CHINA, REPUBLICA POPULAR||
+        xLgr: 'YUEXIU DISTRICT YONGFU ROAD',
+        nro: '45',
+        xCpl: 'YONGFU INTERNATIONAL',
+        xBairro: '...',
+        cMun: '9999999',
+        xMun: 'Exterior',
+        UF: 'EX',
+        CEP: '00000000',
+        cPais: '1600',
+        xPais: 'CHINA, REPUBLICA POPULAR',
+        fone: ''        
       }
     })
     
