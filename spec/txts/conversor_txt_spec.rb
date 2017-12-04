@@ -2,23 +2,31 @@ require 'rails_helper'
 
 RSpec.describe ConversorTxt do
   
-  describe  "#convert_to_txt", :txt do
+  describe  "#ler_txt e #escreve_txt" do
     let(:c){ConversorTxt.new(nota)}
     
-    context 'Com uma nota com planilha e cálculos realizados' do
-      let(:nota){create(:nota, planilha_itens: arquivo('joao/planilha_itens.ods'))}
-      let(:txt_esperado){file_fixture("joao/nota-txt-exportada.txt").read}
+    context 'Dado um TXT gerado pelo sistema distribuído pelo sebrae, versão X.Y' do
+      let(:conteudo_txt_original){file_fixture("joao/nota-txt-exportada.txt").read}
+      let(:conversor){ConversorTxt.new}
+      
+      context 'depois do conteúdo do TXT ter sido interpretado' do
+        before do
+          conversor.interpreta_conteudo_txt(conteudo_txt_original)
+        end
 
-      before do
-        nota.calcula
-      end
+        it 'foi gerada uma estrutura contendo os dados do TXT' do
+          expect(conversor.dados).not_to be_empty
+        end
 
-      it 'gera o conteúdo TXT de acordo com layout TXT NF-e v3.10.1 apropriadamente' do
-        expect(c.convert_to_txt).to eq(txt_esperado)
+        it 'com essa estrutura gera-se um conteúdo identico ao do txt original', :txt do
+          expect(conversor.gera_conteudo_txt).to eq(conteudo_txt_original)
+        end
+
+        # conteúdo gerado de acordo  com layout TXT NF-e v3.10.1 apropriadamente
+        
       end
     end
 
   end
-
 
 end

@@ -12,10 +12,10 @@ E05|<%= d.E.xLgr %>|<%= d.E.nro %>|<%= d.E.xCpl %>|<%= d.E.xBairro %>|<%= d.E.cM
 <% d.H.each do |h| %>
 H|<%= h.nItem %>|<%= h.infAdProd %>|
 I|<%= h.I.cProd %>|<%= h.I.cEAN %>|<%= h.I.xProd %>|<%= h.I.NCM %>|<%= h.I.EXTIPI %>|<%= h.I.CFOP %>|<%= h.I.uCom %>|<%= h.I.qCom %>|<%= h.I.vUnCom %>|<%= h.I.vProd %>|<%= h.I.cEANTrib %>|<%= h.I.uTrib %>|<%= h.I.qTrib %>|<%= h.I.vUnTrib %>|<%= h.I.vFrete %>|<%= h.I.vSeg %>|<%= h.I.vDesc %>|<%= h.I.vOutro %>|<%= h.I.indTot %>|<%= h.I.xPed %>|<%= h.I.nItemPed %>|<%= h.I.nFCI %>|
-<% h.I.I05c.each do |i05c| %>
-I05c|<%= i05c.CEST %>|
-<%end%>
-<% h.I.I18.each do |i18| %>
+<% if h.I.I05c %>
+I05c|<%= h.I.I05c.CEST %>|
+<% end %>
+<% (h.I.I18 or []).each do |i18| %>
 I18|<%= i18.nDI %>|<%= i18.dDI %>|<%= i18.xLocDesemb %>|<%= i18.UFDesemb %>|<%= i18.dDesemb %>|<%= i18.tpViaTransp %>|<%= i18.vAFRMM %>|<%= i18.tpIntermedio %>|<%= i18.CNPJ %>|<%= i18.UFTerceiro %>|<%= i18.cExportador %>|
 <% i18.I25.each do |i25| %>
 I25|<%= i25.nAdicao %>|<%= i25.nSeqAdicC %>|<%= i25.cFabricante %>|<%= i25.vDescDI %>|<%= i25.nDraw %>|
@@ -27,28 +27,44 @@ N|
 N10h|<%= h.M.N.N10h.orig %>|<%= h.M.N.N10h.CSOSN %>|<%= h.M.N.N10h.modBC %>|<%= h.M.N.N10h.vBC %>|<%= h.M.N.N10h.pRedBC %>|<%= h.M.N.N10h.pICMS %>|<%= h.M.N.N10h.vICMS %>|<%= h.M.N.N10h.modBCST %>|<%= h.M.N.N10h.pMVAST %>|<%= h.M.N.N10h.pRedBCST %>|<%= h.M.N.N10h.vBCST %>|<%= h.M.N.N10h.pICMSST %>|<%= h.M.N.N10h.vICMSST %>|<%= h.M.N.N10h.pCredSN %>|<%= h.M.N.N10h.vCredICMSSN %>|
 <% end %>
 <% if h.M.O %>
-<%# O|||||999| #%>
+<%# O|clEnq|CNPJProd|cSelo|qSelo|cEnq| #%>
 O|<%= h.M.O.clEnq %>|<%= h.M.O.CNPJProd %>|<%= h.M.O.cSelo %>|<%= h.M.O.qSelo %>|<%= h.M.O.cEnq %>|
-<% end %>
 <% if h.M.O.O07 %>
 <%# O07|49|8.14| #%>
 O07|<%= h.M.O.O07.CST %>|<%= h.M.O.O07.vIPI %>|
 <% end %>
-<% h.M.O.O07.O10 %>
+<% if h.M.O.O07.O10 %>
 <%# O10|162.76|5.0000| #%>
-O10|162.76|5.0000|
+O10|<%= h.M.O.O07.O10.vBC %>|<%= h.M.O.O07.O10.pIPI %>|
 <% end %>
-<% end %><%# fim do h #%>
-P|137.93|126.92|24.83|0.00|
+<% end %>
+<%# P|vBC|vDespAdu|vII|vIOF| #%>
+<% if h.M.P %>
+P|<%= h.M.P.vBC %>|<%= h.M.P.vDespAdu %>|<%= h.M.P.vII %>|<%= h.M.P.vIOF %>|
+<% end %>
+<% if h.M.Q %>
 Q|
-Q05|98|2.90|
-Q07|137.93|2.1000|
+<%# Q05|CST| #%>
+<% if h.M.Q.Q05 %>
+Q05|<%= h.M.Q.Q05.CST %><% if h.M.Q.Q05.VPIS %>|<%=h.M.Q.Q05.VPIS%><% end %>|<%#Segundo a documentação o campo Q05.VPIS não está disponível na versão 3.10#%>
+<%# Q07|vBC|pPIS|vPIS| #%>
+<% if h.M.Q.Q05.Q07 %>
+Q07|<%= h.M.Q.Q05.Q07.vBC %>|<%= h.M.Q.Q05.Q07.pPIS %><% if h.M.Q.Q05.Q07.vPIS%>|<%= h.M.Q.Q05.Q07.vPIS %><% end %>|
+<% end %>
+<% end %><%# h.M.Q.Q05 #%>
+<% end %><%# fim if h.M.Q#%>
+<% if h.M.S %>
 S|
-S05|98|14.69|
-S07|137.93|10.6500|
-H|2|.|
-I|0000||OBL-16-08-26 - ACABAMENTO AUTOMOTIVO EM PLASTICO ABS CROMADO DO PARA-CHOQUE TRASEIRO TIPO FRISO BUMPER PARA O AUTOMOV...|87082999||3102|PECA|10.0000|14.2533000000|142.53||PECA|10.0000|14.2533000000|105.75|||122.71|1||||
-I05c|0107500|
+<%# S05|CST|vCOFINS| #%>
+<% if h.M.S.S05 %>
+S05|<%= h.M.S.S05.CST %>|<%= h.M.S.S05.vCOFINS %>|
+<%# S07|vBC|pCOFINS| #%>
+<% if h.M.S.S05.S07 %>
+S07|<%= h.M.S.S05.S07.vBC %>|<%= h.M.S.S05.S07.pCOFINS %>|
+<% end %>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+<% end %><%# h.M.S.S05 #%>
+<% end %><%# if h.M.S #%>
+<% end %><%# fim do h #%>
 I18|1716607959|2017-09-28|AEROPORTO INTERNACIONAL DE VIRACOPOS|SP|2017-09-28|4||1|14626983000180|SP|1192|
 I25|1|1|1192|||
 M||
