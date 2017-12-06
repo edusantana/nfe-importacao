@@ -2,6 +2,8 @@ require 'rails_helper'
 
 RSpec.describe ConversorTxt do
   
+
+
   describe  "#ler_txt e #escreve_txt" do
     let(:c){ConversorTxt.new(nota)}
     
@@ -19,7 +21,7 @@ RSpec.describe ConversorTxt do
         end
 
         it 'com essa estrutura gera-se um conteúdo identico ao do txt original', :txt do
-          expect(conversor.gera_conteudo_txt).to eq(conteudo_txt_original)
+          expect(conversor.escreve_conteudo_txt).to eq(conteudo_txt_original)
         end
 
         # conteúdo gerado de acordo  com layout TXT NF-e v3.10.1 apropriadamente
@@ -28,5 +30,6 @@ RSpec.describe ConversorTxt do
     end
 
   end
+
 
 end

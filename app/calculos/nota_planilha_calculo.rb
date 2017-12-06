@@ -35,7 +35,7 @@ class NotaPlanilhaCalculo
     calcula_ICMS_final
     calcula_total_nf
     
-    dados
+    @dados
   end
   
   private
@@ -45,6 +45,10 @@ class NotaPlanilhaCalculo
     dados['totais'] = {}
     ler_itens
     ler_extra
+    ler_planilha_dados
+    ler_planilha_B
+    ler_planilha_C
+    ler_planilha_E
     
   end
   
@@ -70,6 +74,49 @@ class NotaPlanilhaCalculo
       extra[key] = linha[1]
     end
     dados.merge!(extra)
+  end
+
+  def ler_planilha_dados
+    sheet = @planilha.sheet('Dados')
+    hash = {}
+    cabecalhos = {'Chave' => 'chave', 'UF do emitente'=>'emitente_UF'}
+    sheet.each do |linha|
+      if cabecalhos.key? linha[0]
+        key = cabecalhos[linha[0]]
+      else
+        key = linha[0]
+      end
+      hash[key] = linha[1]
+    end
+    dados.merge!(hash)
+  end
+
+  def ler_planilha_B
+    sheet = @planilha.sheet('B')
+    hash = {}
+    sheet.each do |linha|
+      hash[linha[0]] = linha[1]
+    end
+    dados.merge!({'B' => hash})
+  end
+
+  def ler_planilha_C
+    sheet = @planilha.sheet('C')
+    hash = {}
+    sheet.each do |linha|
+      hash[linha[0]] = linha[1]
+    end
+    dados.merge!({'C' => hash})
+  end
+
+
+  def ler_planilha_E
+    sheet = @planilha.sheet('E')
+    hash = {}
+    sheet.each do |linha|
+      hash[linha[0]] = linha[1]
+    end
+    dados.merge!({'E' => hash})
   end
 
   def calcula_valor_aduaneiro_em_modea_estrangeira

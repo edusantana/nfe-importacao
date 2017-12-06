@@ -14,7 +14,11 @@ class Nota < ApplicationRecord
   end
   
   def to_txt
-    txt = IO.read('/home/dudu/w/nfe-espelho/spec/fixtures/files/joao/nota-txt-exportada.txt')
+
+    conversor = ConversorTxt.new(self)
+    conversor.converte_para_txt
+    
+    # txt = IO.read('/home/dudu/w/nfe-espelho/spec/fixtures/files/joao/nota-txt-exportada.txt')
 #    txt.strip.gsub(/\n/, "\r\n")
   end
   
