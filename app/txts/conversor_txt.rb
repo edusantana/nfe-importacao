@@ -130,26 +130,50 @@ class ConversorTxt
     result = []
     @nota.dados['itens'].each_with_index do |item, n|
     end
-    c = ['0000','']
-    #byebug
+    
+    c = ['0000',''] # "cProd"=>"0000", "cEAN"=>"",
+
     # {"Item"=>"item1", "Preço"=>5, "Quantidade"=>5, "II"=>0.18, "IPI"=>0.05, "PIS"=>0.021, "COFINS"=>0.1065, "ICMS"=>0.18, "valor_aduaneiro_em_modea_estrangeira"=>25, "valor_aduaneiro_em_reais"=>79.185, "despesas_aduaneiras"=>58.748591549295796, "BC_II"=>137.93359154929578, "valor_II"=>24.82804647887324, "BC_IPI"=>162.76163802816902, "valor_IPI"=>8.138081901408452, "BC_PIS_COFINS"=>137.93359154929578, "valor_PIS"=>2.896605422535212, "valor_COFINS"=>14.689927500000001, "valor_total_produto"=>79.185, "valor_unitario_real"=>15.837, "rateio_despesas_acessorias"=>0.03521126760563381, "despesas_acessorias"=>7.552816901408453, "valor_ICMS"=>43.032966531260726, "BC_ICMS_FINAL"=>239.07203628478192, "total_despesas_acessorias"=>126.92090790450018, "total_despesas_sem_frete"=>68.17231635520439, "total_frete"=>58.748591549295796, "ICMS_final"=>43.03296653126074}
     # cProd|cEAN|xProd|NCM|EXTIPI|CFOP|uCom|qCom|vUnCom|vProd|cEANTrib|uTrib|qTrib|vUnTrib|vFrete|vSeg|vDesc|vOutro|indTot|xPed|nItemPed|nFCI
+    
     # {"cProd"=>"0000", "cEAN"=>"", "xProd"=>"OBL-12-01-01 - ACABAMENTO AUTOMOTIVO DA GRADE DIANTEIRA, LADO ESQUERDO E DIREITO EM PLASTICO ABS CROMADO COMPATIVEL C...", "NCM"=>"87082999", "EXTIPI"=>"", "CFOP"=>"3102", "uCom"=>"PAR", "qCom"=>"5.0000", "vUnCom"=>"15.8370000000", "vProd"=>"79.19", "cEANTrib"=>"", "uTrib"=>"PAR", "qTrib"=>"5.0000", "vUnTrib"=>"15.8370000000", "vFrete"=>"58.75", "vSeg"=>"", "vDesc"=>"", "vOutro"=>"68.17", "indTot"=>"1", "xPed"=>nil, "nItemPed"=>nil, "nFCI"=>nil} 
     # TXT:
     # I|0000||OBL-12-01-01 - ACABAMENTO AUTOMOTIVO DA GRADE DIANTEIRA, LADO ESQUERDO E DIREITO EM PLASTICO ABS CROMADO COMPATIVEL C...|87082999||3102|PAR|5.0000|15.8370000000|79.19||PAR|5.0000|15.8370000000|58.75|||68.17|1||||
+
+    c << item['Item'].truncate(120) 
 
     # cProd|cEAN|xProd| **NCM** |EXTIPI|CFOP|uCom|qCom|vUnCom|vProd|cEANTrib|uTrib|qTrib|vUnTrib|vFrete|vSeg|vDesc|vOutro|indTot|xPed|nItemPed|nFCI
     c << nota.dados['NCM']
     
     # EXTIPI|CFOP|uCom|qCom|vUnCom|vProd|cEANTrib|uTrib|qTrib|vUnTrib|vFrete|vSeg|vDesc|vOutro|indTot|xPed|nItemPed|nFCI
-    trunca = {'Item'=>120}
-    ['Item'].each do |k|
-      string = item[k] 
-      if trunca[k]
-        string = string.truncate(trunca[k]) 
-      end
-      c << string
-    end
+    # "EXTIPI"=>""
+
+    c << item['EXTIPI']
+
+    #  "CFOP"=>"3102", 
+    c << item['CFOP']
+
+    # "uCom"=>"PAR", 
+    c << item['uCom']
+
+    # "qCom"=>"5.0000", 
+    c << item['Quantidade'].to_f
+    
+    # "vUnCom"=>"15.8370000000", 
+    c << item['valor_unitario_real']
+    
+    # "vProd"=>"79.19", 
+    c << item['valor_total_produto'].to_f.round(2)
+
+    # "cEANTrib"=>"", 
+    c << item['cEANTrib']
+    
+    # "uTrib"=>"PAR", 
+    c << item['uTrib']
+    
+    # "qTrib"=>"5.0000", "vUnTrib"=>"15.8370000000", "vFrete"=>"58.75", "vSeg"=>"", "vDesc"=>"", "vOutro"=>"68.17", "indTot"=>"1", "xPed"=>nil, "nItemPed"=>nil, "nFCI"=>nil
+    
+
     result << {key: 'I', campos: c, grupos:[]}
 
     result
