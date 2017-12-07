@@ -49,6 +49,7 @@ class NotaPlanilhaCalculo
     ler_planilha_B
     ler_planilha_C
     ler_planilha_E
+    ler_planilha_I
     
   end
   
@@ -118,6 +119,22 @@ class NotaPlanilhaCalculo
     end
     dados.merge!({'E' => hash})
   end
+
+  def ler_planilha_I
+    sheet = @planilha.sheet('I')
+    hash = {}
+    sheet.each do |linha|
+      camposI18 = ("nDI|dDI|xLocDesemb|UFDesemb|dDesemb|tpViaTransp|vAFRMM|tpIntermedio|CNPJ|UFTerceiro|cExportador".split '|')
+      camposI25 = ("nAdicao|nSeqAdicC|cFabricante|vDescDI|nDraw".split '|')
+      campos = camposI18 + camposI25
+
+      if campos.include? linha[0]
+        hash[linha[0]] = linha[1]
+      end
+    end
+    dados.merge!({'importacao' => hash})
+  end
+
 
   def calcula_valor_aduaneiro_em_modea_estrangeira
     

@@ -128,8 +128,6 @@ class ConversorTxt
 
   def grupo_I(item, n)
     result = []
-    @nota.dados['itens'].each_with_index do |item, n|
-    end
     
     c = ['0000',''] # "cProd"=>"0000", "cEAN"=>"",
 
@@ -200,9 +198,49 @@ class ConversorTxt
     c << item['nFCI']
     
 
-    result << {key: 'I', campos: c, grupos:[]}
+    result << {key: 'I', campos: c, grupos:[grupo_I05a(item), grupo_I05c(item), grupo_I18].flatten.compact}
 
     result
+  end
+
+  def grupo_I05a(item)
+    result = []
+
+    nves = (item['NVE'] or "").split ','
+    nves.map {|nve| {key: 'I05a', campos: nve, grupos:[]} }
+
+  end
+
+  def grupo_I05c(item)
+    #[0 ou 1]{
+    #I05c|CEST
+
+
+    cest = item['CEST']
+    if cest.nil? || cest == ''
+      return []
+    else
+      return {key: 'I05c', campos: [cest], grupos:[]}
+    end
+
+  end
+
+  def grupo_I18
+    #[0 a 100]{
+    # I18|nDI|dDI|xLocDesemb|UFDesemb|dDesemb|tpViaTransp|vAFRMM|tpIntermedio|CNPJ|UFTerceiro|cExportador|
+    #     [1 a 100]{
+    #     I25|nAdicao|nSeqAdicC|cFabricante|vDescDI|nDraw|
+    unless nota.dados['importacao']
+      []
+    else
+      c = ("nDI|dDI|xLocDesemb|UFDesemb|dDesemb|tpViaTransp|vAFRMM|tpIntermedio|CNPJ|UFTerceiro|cExportador".split '|').map {|k| nota.dados['importacao'][k]}
+      return {key: 'I18', campos: c, grupos:[grupo_I25].flatten.compact}
+    end
+  end
+
+  def grupo_I25
+    c = 'nAdicao|nSeqAdicC|cFabricante|vDescDI|nDraw'.split('|').map{|k| nota.dados['importacao'][k] }
+    return {key: 'I25', campos: c, grupos:[].flatten.compact}
   end
 
   def ler_linha
