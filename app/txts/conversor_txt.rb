@@ -171,7 +171,33 @@ class ConversorTxt
     # "uTrib"=>"PAR", 
     c << item['uTrib']
     
-    # "qTrib"=>"5.0000", "vUnTrib"=>"15.8370000000", "vFrete"=>"58.75", "vSeg"=>"", "vDesc"=>"", "vOutro"=>"68.17", "indTot"=>"1", "xPed"=>nil, "nItemPed"=>nil, "nFCI"=>nil
+    # "qTrib"=>"5.0000", 
+
+    c << item['Preço'].to_f
+
+    # "vUnTrib"=>"15.8370000000", 
+    c << item['valor_unitario_real']    
+    
+    # "vFrete"=>"58.75", 
+    c << item['total_frete'].round(2)
+    
+    
+    # "vSeg"=>"", 
+    c << item['vSeg']
+    
+    # "vDesc"=>"", 
+    c << item['vDesc']
+    
+    # "vOutro"=>"68.17", 
+    c << item['total_despesas_sem_frete'].round(2)
+    
+    # "indTot"=>"1", 
+    c << item['indTot']
+    
+    # "xPed"=>nil, "nItemPed"=>nil, "nFCI"=>nil
+    c << item['xPed']
+    c << item['nItemPed']
+    c << item['nFCI']
     
 
     result << {key: 'I', campos: c, grupos:[]}
