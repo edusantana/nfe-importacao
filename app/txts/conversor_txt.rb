@@ -121,7 +121,7 @@ class ConversorTxt
   def grupo_H
     result = []
     @nota.dados['itens'].each_with_index do |item, n|
-      result << {key: 'H', campos: [n+1,'.'], grupos:[grupo_I(item, n)].flatten.compact}
+      result << {key: 'H', campos: [n+1,'.'], grupos:[grupo_I(item, n), grupo_M(item, n)].flatten.compact}
     end
     result
   end
@@ -242,6 +242,108 @@ class ConversorTxt
     c = 'nAdicao|nSeqAdicC|cFabricante|vDescDI|nDraw'.split('|').map{|k| nota.dados['importacao'][k] }
     return {key: 'I25', campos: c, grupos:[].flatten.compact}
   end
+
+  def grupo_M(item, n)
+    # M|vTotTrib|
+    {key: 'M', campos: [''], grupos:[grupo_N(item,n), grupo_O(item), grupo_P(item), grupo_Q(item), grupo_S(item)].flatten.compact}
+  end
+
+  def grupo_N(item, n)
+    {key: 'N', campos: [], grupos:[grupo_Ni(item,n)].flatten.compact}
+  end
+
+  def grupo_Ni(item,n)
+    # assume: Tributação do ICMS - 90 – Outros
+    # N10h
+    # orig|CSOSN|modBC|vBC|pRedBC|pICMS|vICMS|modBCST|pMVAST|pRedBCST|vBCST|pICMSST|vICMSST|pCredSN|vCredICMSSN
+    #byebug
+
+    h = {orig: item['orig'], CSOSN: item['CSOSN'], modBC: item['modBC'], vBC: item['BC_ICMS_FINAL'].round(2), pRedBC: '',
+        pICMS: "%0.2f" % (item['ICMS']*100), vICMS: item['ICMS_final'].round(2), modBCST: '', pMVAST: '', pRedBCST: '', vBCST: '', pICMSST: '', vICMSST: '', pCredSN: '', vCredICMSSN: ''}
+
+    {key: 'N10h', campos: h.values, grupos:[].flatten.compact}
+  end
+
+  def grupo_O(item)
+    # [0 ou 1]{
+    # O|clEnq|CNPJProd|cSelo|qSelo|cEnq|
+    # O|||||999|
+    {key: 'O', campos: ['','','','','999'], grupos:[grupo_O07(item), grupo_O10(item)].flatten.compact}
+  end
+
+  def grupo_O07(item)
+    # O07|CST|vIPI|
+    {key: 'O07', campos: [49, "%0.2f" % item['valor_IPI']], grupos:[].flatten.compact}
+  end
+
+  def grupo_O10(item)
+    # O10|vBC|pIPI|
+    # O10|162.76|5.0000|
+    {key: 'O10', campos: ["%0.2f" % item['BC_IPI'], "%0.4f" % (item['IPI']*100)], grupos:[].flatten.compact}
+  end
+
+  def grupo_P(item)
+    # P|137.93|126.92|24.83|0.00|
+    # P|vBC|vDespAdu|vII|vIOF|
+    c = [item['BC_PIS_COFINS'], item['total_despesas_acessorias'], item['valor_II'], 0].map {|v| "%0.2f" % v}
+    {key: 'P', campos: [c], grupos:[].flatten.compact}
+  end
+
+  def grupo_Q(item)
+=begin
+    Q|
+      [Seleção entre Q02 ou Q03 ou Q04 ou Q05]{
+        Q02|CST|vBC|pPIS|vPIS|
+        [ou]
+        Q03|CST|qBCProd|vAliqProd|vPIS|
+        [ou]
+        Q04|CST|
+        [ou]
+        Q05|CST|
+        [Seleção entre Q07 ou Q010]{
+          Q07|vBC|pPIS|vPIS|
+          [ou]
+          Q10|qBCProd|vAliqProd|
+        }
+      }
+    }
+=end
+    q07 = {key: 'Q07', campos: ["%0.2f" % item['BC_II'], "%0.4f" % (item['PIS']*100)], grupos:[].flatten.compact}
+    q05 = {key: 'Q05', campos: [98,''], grupos:[q07].flatten.compact} # no txt há dois campos!?
+    {key: 'Q', campos: [], grupos:[q05].flatten.compact}
+  end
+
+  def grupo_S(item)
+=begin
+  S|
+    [Seleção entre S02 ou S03 ou S04 ou S05]{
+    S02|CST|vBC|pCOFINS|vCOFINS|
+    [ou]
+    S03|CST|qBCProd|vAliqProd|vCOFINS|
+    [ou]
+    S04|CST|
+    [ou]
+    S05|CST|vCOFINS|
+    [Seleção entre S07 ou S09]{
+      S07|vBC|pCOFINS|
+      [ou]
+      S09|qBCProd|vAliqProd|
+      }
+    }
+  }
+=end
+    {key: 'S', campos: [], grupos:[grupo_S05(item)].flatten.compact}
+  end
+
+  def grupo_S05(item)
+    {key: 'S05', campos: [98, item['valor_COFINS'].round(2)], grupos:[grupo_S07(item)].flatten.compact}
+  end
+
+  def grupo_S07(item)
+    c = ["%0.2f" % item['BC_PIS_COFINS'], "%0.4f" % (item['COFINS']*100)]
+    {key: 'S07', campos: [c], grupos:[].flatten.compact}
+  end
+
 
   def ler_linha
     @linha_lida.empty? ? @string.gets : @linha_lida.pop
