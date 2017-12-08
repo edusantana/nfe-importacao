@@ -28,7 +28,6 @@ class ConversorTxt
   def escreve_conteudo_txt
     @string = StringIO.new()
     escreve_cabecalho_NOTAFISCAL
-    byebug
     escreve_campos_e_grupos(@dados)
     @string.string
   end
@@ -77,7 +76,7 @@ class ConversorTxt
 
 =end
     chave = @nota.dados['chave']
-    @dados = {key: 'A', campos:['3.10',"NFe#{chave}"], grupos:[grupo_B, grupo_C, grupo_E, grupo_H].flatten.compact}
+    @dados = {key: 'A', campos:['3.10',"NFe#{chave}"], grupos:[grupo_B, grupo_C, grupo_E, grupo_H, grupo_W, grupo_X, grupo_Z].flatten.compact}
   end
 
   def grupo_B
@@ -346,6 +345,99 @@ class ConversorTxt
     {key: 'S07', campos: [c], grupos:[].flatten.compact}
   end
 
+  def grupo_W
+    {key: 'W', campos: [], grupos:[grupo_W02].flatten.compact}
+  end
+
+  def grupo_W02
+    # vBC|vICMS|vICMSDeson|vBCST|vST|vProd|vFrete|vSeg|vDesc|vII|vIPI|vPIS|vCOFINS|vOutro|vNF|vTotTrib|
+    # -W02|6789.66|1222.13|0.00|0.00|0.00|2248.88|1668.43|0.00|0.00|705.13|231.13|82.24|417.16|1936.10|6789.67|0.00|
+
+    c = []
+    #c = ('6789.66|1222.13|0.00|0.00|0.00|2248.88|1668.43|0.00|0.00|705.13|231.13|82.24|417.16|1936.10|6789.67|0.00'.split '|').map {|v| v.to_f}
+    #vBC
+    c << nota.dados['totais']['BC_ICMS_FINAL']
+    #vICMS
+    c << nota.dados['totais']['valor_ICMS']
+    #vICMSDeson
+    c << 0
+    #vBCST
+    c << 0
+    #vST
+    c << 0
+    #vProd
+    c << nota.dados['totais']['valor_total_produto']
+    #vFrete
+    c << nota.dados['totais']['total_frete']
+    #vSeg
+    c << 0
+    #vDesc
+    c << 0
+    #vII
+    c << nota.dados['totais']['valor_II']
+    #vIPI
+    c << nota.dados['totais']['valor_IPI']
+    #vPIS
+    c << nota.dados['totais']['valor_PIS']
+    #vCOFINS
+    c << nota.dados['totais']['valor_COFINS']
+    #vOutro
+    c << nota.dados['totais']['total_despesas_sem_frete']
+    #vNF
+    c << nota.dados['totais']['total_nf']
+    #vTotTrib
+    c << 0
+
+    {key: 'W02', campos: c.map {|v| '%0.2f' % v}, grupos:[grupo_W04].flatten.compact}
+  end
+
+  def grupo_W04
+=begin
+    -W04c|0.00|
+    -W04e|0.00|
+    -W04g|0.00|
+=end
+    result = []
+
+    result << {key: 'W04c', campos: ['0.00'], grupos:[].flatten.compact}
+    result << {key: 'W04e', campos: ['0.00'], grupos:[].flatten.compact}
+    result << {key: 'W04g', campos: ['0.00'], grupos:[].flatten.compact}
+
+    result
+  end
+
+  def grupo_X
+    # X|modFrete|
+    c = [nota.dados['transporte']['modFrete']]
+    {key: 'X', campos: c, grupos:[grupo_X26].flatten.compact}
+  end
+
+  def grupo_X26
+    # X26|qVol|esp|marca|nVol|pesoL|pesoB|
+    result = []
+
+    nota.dados['transporte']['transportes'].each do |t|
+      c = 'qVol|esp|marca|nVol|pesoL|pesoB'.split('|').map {|k| t[k]}
+      c[4] = '%0.3f' % c[4]
+      c[5] = '%0.3f' % c[5]
+
+      result << {key: 'X26', campos: c, grupos:[].flatten.compact}
+    end
+
+    result
+  end
+
+  def grupo_Z
+    # ;S/REF: FATURACOMERCIAL201713JBR N/REF: ABC55517DHL DI: 1716607959 PIS: R$ 82,26 COFINS: R$ 417,19 TUS: R$ 214,50
+    infAdFisco = ''
+    pis = '%0.2f' % @nota.dados['totais']['valor_PIS']
+    cofins = '%0.2f' % @nota.dados['totais']['valor_COFINS']
+    tus = '%0.2f' % @nota.dados['totais']['despesas_acessorias']
+    infCpl= ";S/REF: #{@nota.dados['S/REF']} N/REF: #{@nota.dados['N/REF']} DI: #{@nota.dados['DI']} PIS: R$ #{pis} COFINS: R$ #{cofins} TUS: R$ #{tus}"
+    
+    
+    {key: 'Z', campos: [infAdFisco, infCpl] , grupos:[].flatten.compact}
+  end
 
   def ler_linha
     @linha_lida.empty? ? @string.gets : @linha_lida.pop
@@ -365,6 +457,8 @@ class ConversorTxt
       return nil, false
     end
   end
+
+  
 
 
   def escreve_campos_e_grupos(hash)

@@ -50,6 +50,7 @@ class NotaPlanilhaCalculo
     ler_planilha_C
     ler_planilha_E
     ler_planilha_I
+    ler_planilha_Transporte
     
   end
   
@@ -135,6 +136,16 @@ class NotaPlanilhaCalculo
     dados.merge!({'importacao' => hash})
   end
 
+  def ler_planilha_Transporte
+    sheet = @planilha.sheet('Transporte')
+    hash = {'modFrete' => sheet.a2, 'transportes' => []}
+    headers = 'modFrete','qVol','esp','marca','nVol', 'pesoL','pesoB'
+    sheet.each do |linha|
+      hash['transportes'] << Hash[headers.zip linha]
+    end
+    hash['transportes'].shift # descarta cabeçalho
+    dados.merge!({'transporte' => hash})    
+  end
 
   def calcula_valor_aduaneiro_em_modea_estrangeira
     
