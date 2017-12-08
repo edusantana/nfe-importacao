@@ -28,6 +28,7 @@ class ConversorTxt
   def escreve_conteudo_txt
     @string = StringIO.new()
     escreve_cabecalho_NOTAFISCAL
+    byebug
     escreve_campos_e_grupos(@dados)
     @string.string
   end
@@ -152,33 +153,32 @@ class ConversorTxt
     c << item['CFOP']
 
     # "uCom"=>"PAR", 
-    c << item['uCom']
+    c << item['uCom'].truncate(6, omission: '')
 
     # "qCom"=>"5.0000", 
-    c << item['Quantidade'].to_f
+    c << "%0.4f" % item['Quantidade'].to_f
     
     # "vUnCom"=>"15.8370000000", 
-    c << item['valor_unitario_real']
+    c << "%0.10f" % item['valor_unitario_real'].to_f
     
     # "vProd"=>"79.19", 
-    c << item['valor_total_produto'].to_f.round(2)
+    c << "%0.2f" % item['valor_total_produto'].to_f
 
     # "cEANTrib"=>"", 
     c << item['cEANTrib']
     
     # "uTrib"=>"PAR", 
-    c << item['uTrib']
+    c << (item['uTrib'] or item['uCom']).truncate(6, omission: '')
     
     # "qTrib"=>"5.0000", 
 
-    c << item['Preço'].to_f
+    c << "%0.4f" % item['Quantidade'].to_f
 
     # "vUnTrib"=>"15.8370000000", 
-    c << item['valor_unitario_real']    
+    c << "%0.10f" % item['valor_unitario_real'].to_f
     
     # "vFrete"=>"58.75", 
-    c << item['total_frete'].round(2)
-    
+    c << "%0.2f" % item['total_frete']
     
     # "vSeg"=>"", 
     c << item['vSeg']
@@ -190,7 +190,8 @@ class ConversorTxt
     c << item['total_despesas_sem_frete'].round(2)
     
     # "indTot"=>"1", 
-    c << item['indTot']
+    c << item['indTot'] # == '' ? @nota.dados['itens'].first('indTot') : item['indTot']
+    #byebug
     
     # "xPed"=>nil, "nItemPed"=>nil, "nFCI"=>nil
     c << item['xPed']
@@ -199,16 +200,17 @@ class ConversorTxt
     
 
     result << {key: 'I', campos: c, grupos:[grupo_I05a(item), grupo_I05c(item), grupo_I18].flatten.compact}
+    
 
     result
   end
 
   def grupo_I05a(item)
     result = []
-
     nves = (item['NVE'] or "").split ','
-    nves.map {|nve| {key: 'I05a', campos: nve, grupos:[]} }
+    result += nves.map {|nve| {key: 'I05a', campos: nve, grupos:[]} }
 
+    result
   end
 
   def grupo_I05c(item)
@@ -258,8 +260,8 @@ class ConversorTxt
     # orig|CSOSN|modBC|vBC|pRedBC|pICMS|vICMS|modBCST|pMVAST|pRedBCST|vBCST|pICMSST|vICMSST|pCredSN|vCredICMSSN
     #byebug
 
-    h = {orig: item['orig'], CSOSN: item['CSOSN'], modBC: item['modBC'], vBC: item['BC_ICMS_FINAL'].round(2), pRedBC: '',
-        pICMS: "%0.2f" % (item['ICMS']*100), vICMS: item['ICMS_final'].round(2), modBCST: '', pMVAST: '', pRedBCST: '', vBCST: '', pICMSST: '', vICMSST: '', pCredSN: '', vCredICMSSN: ''}
+    h = {orig: item['orig'], CSOSN: item['CSOSN'], modBC: item['modBC'], vBC: '%0.2f' % item['BC_ICMS_FINAL'], pRedBC: '',
+        pICMS: "%0.2f" % (item['ICMS']*100), vICMS: '%0.2f' % item['ICMS_final'], modBCST: '', pMVAST: '', pRedBCST: '', vBCST: '', pICMSST: '', vICMSST: '', pCredSN: '', vCredICMSSN: ''}
 
     {key: 'N10h', campos: h.values, grupos:[].flatten.compact}
   end
@@ -309,7 +311,7 @@ class ConversorTxt
     }
 =end
     q07 = {key: 'Q07', campos: ["%0.2f" % item['BC_II'], "%0.4f" % (item['PIS']*100)], grupos:[].flatten.compact}
-    q05 = {key: 'Q05', campos: [98,''], grupos:[q07].flatten.compact} # no txt há dois campos!?
+    q05 = {key: 'Q05', campos: [98,"%0.2f" % item['valor_PIS']], grupos:[q07].flatten.compact} # no txt há dois campos!?
     {key: 'Q', campos: [], grupos:[q05].flatten.compact}
   end
 
@@ -336,7 +338,7 @@ class ConversorTxt
   end
 
   def grupo_S05(item)
-    {key: 'S05', campos: [98, item['valor_COFINS'].round(2)], grupos:[grupo_S07(item)].flatten.compact}
+    {key: 'S05', campos: [98, '%0.2f' % item['valor_COFINS']], grupos:[grupo_S07(item)].flatten.compact}
   end
 
   def grupo_S07(item)
