@@ -287,6 +287,7 @@ class ConversorTxt
   def grupo_P(item)
     # P|137.93|126.92|24.83|0.00|
     # P|vBC|vDespAdu|vII|vIOF|
+    # BC_ICMS_FINAL ?
     c = [item['BC_PIS_COFINS'], item['total_despesas_acessorias'], item['valor_II'], 0].map {|v| "%0.2f" % v}
     {key: 'P', campos: [c], grupos:[].flatten.compact}
   end

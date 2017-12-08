@@ -44,7 +44,6 @@ class NotaPlanilhaCalculo
     @planilha = Roo::Spreadsheet.open(nota.planilha_itens.path) 
     dados['totais'] = {}
     ler_itens
-    ler_extra
     ler_planilha_dados
     ler_planilha_B
     ler_planilha_C
@@ -67,22 +66,12 @@ class NotaPlanilhaCalculo
     dados['itens'] = itens
   end
 
-  def ler_extra
-    sheet = @planilha.sheet('Extra')
-    extra = {}
-    cabecalhos = {'Câmbio' => 'cambio', 'TOTAL FRETE'=>'frete', 'TAXA DE UTILIZACAO DO SISCOMEX' => 'taxa_siscomex', 'S/REF' => 'S/REF', 'N/REF'=>'N/REF', 'DI'=>'DI'}
-    sheet.each do |linha|
-      key = cabecalhos[linha[0]]
-      extra[key] = linha[1]
-    end
-    dados.merge!(extra)
-  end
-
   def ler_planilha_dados
     sheet = @planilha.sheet('Dados')
     hash = {}
-    cabecalhos = {'Chave' => 'chave', 'UF do emitente'=>'emitente_UF'}
+    cabecalhos = {'Chave' => 'chave', 'UF do emitente'=>'emitente_UF', 'Câmbio' => 'cambio', 'TOTAL FRETE'=>'frete', 'TAXA DE UTILIZACAO DO SISCOMEX' => 'taxa_siscomex', 'S/REF' => 'S/REF', 'N/REF'=>'N/REF', 'DI'=>'DI'}
     sheet.each do |linha|
+#      byebug
       if cabecalhos.key? linha[0]
         key = cabecalhos[linha[0]]
       else

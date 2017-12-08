@@ -14,7 +14,7 @@ RSpec.describe NotaPlanilhaCalculo do
       end
       
       context 'tomando a planilha de joão como exemplo' do
-        let(:nota){create(:nota, planilha_itens: arquivo('joao/planilha_itens.ods'))}
+        let(:nota){create(:nota, planilha_itens: arquivo('joao/joao1/planilha_itens.ods'))}
         it 'calcula os valores para nota fiscal baseados na planilha e retorna em um hash' do
           dados = c.calcula
           expect(dados).not_to be_empty
@@ -129,7 +129,7 @@ RSpec.describe NotaPlanilhaCalculo do
           expect(dados['totais']['total_nf']).to be_within(0.03).of( 6_789.62 )
           
           # Salva dados como json para inspeção:
-          open('spec/fixtures/files/joao/dados.json', 'w') { |f| f << JSON.pretty_generate(dados) } 
+          open('spec/fixtures/files/joao/joao1/dados.json', 'w') { |f| f << JSON.pretty_generate(dados) } 
 
         end
       end

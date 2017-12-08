@@ -79,7 +79,7 @@ RSpec.feature "Notas", type: :feature do
   end
 
   def e_anexar_planilha
-    attach_file 'nota[planilha_itens]', arquivo_path('joao/itens-joao.xls')
+    attach_file 'nota[planilha_itens]', arquivo_path('joao/joao1/itens-joao.xls')
   end
 
   def entao_a_nota_foi_salva

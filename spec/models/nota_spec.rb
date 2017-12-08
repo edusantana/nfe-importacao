@@ -19,7 +19,7 @@ RSpec.describe Nota, type: :model do
   describe '#planilha_itens' do
     let(:nota){create(:nota)}
     context 'Aceita planilha ods' do
-      let(:planilha){arquivo("joao/planilha_itens.ods")}
+      let(:planilha){arquivo("joao/joao1/planilha_itens.ods")}
       before do
         nota.planilha_itens = planilha
       end
@@ -28,7 +28,7 @@ RSpec.describe Nota, type: :model do
       end
     end
     context 'Não aceita planilha csv' do
-      let(:planilha){arquivo("joao/planilha_itens.csv")}
+      let(:planilha){arquivo("joao/joao1/planilha_itens.csv")}
       it 'retorna a planilha' do
         pending 'falta aprender a validar'
         nota.planilha_itens = planilha
@@ -38,7 +38,7 @@ RSpec.describe Nota, type: :model do
   end
   
   describe '#calcula' do
-    let(:nota){create(:nota, planilha_itens: arquivo('joao/planilha_itens.ods'))}
+    let(:nota){create(:nota, planilha_itens: arquivo('joao/joao1/planilha_itens.ods'))}
     context 'Depois que as planilhas foram inseridas' do
       before do
       end
@@ -53,12 +53,13 @@ RSpec.describe Nota, type: :model do
 
   describe '#to_txt', :txt, :wip do
     context 'Quando invocado sobre uma nota com planilha calculada (ex: nota de joão)' do
-      let(:nota){create(:nota, planilha_itens: arquivo('joao/planilha_itens.ods'))}
-      let(:txt_esperado){file_fixture("joao/nota-txt-exportada.txt").read}
+      let(:nota){create(:nota, planilha_itens: arquivo('joao/joao1/planilha_itens.ods'))}
+      let(:txt_esperado){file_fixture("joao/joao1/nota-txt-exportada.txt").read}
       before do
         nota.calcula
       end
       it 'exporta a nota para o format TXT' do
+        #IO.write('nota.txt', nota.to_txt) 
         expect(nota.to_txt).to eq(txt_esperado)
       end
 
