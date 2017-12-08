@@ -70,7 +70,7 @@ class NotaPlanilhaCalculo
   def ler_extra
     sheet = @planilha.sheet('Extra')
     extra = {}
-    cabecalhos = {'Câmbio' => 'cambio', 'TOTAL FRETE'=>'frete', 'TAXA DE UTILIZACAO DO SISCOMEX' => 'taxa_siscomex'}
+    cabecalhos = {'Câmbio' => 'cambio', 'TOTAL FRETE'=>'frete', 'TAXA DE UTILIZACAO DO SISCOMEX' => 'taxa_siscomex', 'S/REF' => 'S/REF', 'N/REF'=>'N/REF', 'DI'=>'DI'}
     sheet.each do |linha|
       key = cabecalhos[linha[0]]
       extra[key] = linha[1]

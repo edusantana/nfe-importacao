@@ -2,6 +2,7 @@ require "erb" # remover
 require 'roo'
 
 class ConversorTxt
+  include ActionView::Helpers::NumberHelper  
   
   attr_reader :nota  
   attr_reader :dados
@@ -430,10 +431,11 @@ class ConversorTxt
   def grupo_Z
     # ;S/REF: FATURACOMERCIAL201713JBR N/REF: ABC55517DHL DI: 1716607959 PIS: R$ 82,26 COFINS: R$ 417,19 TUS: R$ 214,50
     infAdFisco = ''
-    pis = '%0.2f' % @nota.dados['totais']['valor_PIS']
-    cofins = '%0.2f' % @nota.dados['totais']['valor_COFINS']
-    tus = '%0.2f' % @nota.dados['totais']['despesas_acessorias']
-    infCpl= ";S/REF: #{@nota.dados['S/REF']} N/REF: #{@nota.dados['N/REF']} DI: #{@nota.dados['DI']} PIS: R$ #{pis} COFINS: R$ #{cofins} TUS: R$ #{tus}"
+    pis = number_to_currency(@nota.dados['totais']['valor_PIS'], precision: 2)
+    cofins = number_to_currency(@nota.dados['totais']['valor_COFINS'], precision: 2)
+    tus = number_to_currency(@nota.dados['totais']['despesas_acessorias'], precision: 2)
+    
+    infCpl= ";S/REF: #{@nota.dados['S/REF']} N/REF: #{@nota.dados['N/REF']} DI: #{@nota.dados['DI']} PIS: #{pis} COFINS: #{cofins} TUS: #{tus}"
     
     
     {key: 'Z', campos: [infAdFisco, infCpl] , grupos:[].flatten.compact}
