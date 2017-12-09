@@ -76,8 +76,9 @@ class ConversorTxt
     ZZ - Informações da Assinatura Digital
 
 =end
-    chave = @nota.dados['chave']
-    @dados = {key: 'A', campos:['3.10',"NFe#{chave}"], grupos:[grupo_B, grupo_C, grupo_E, grupo_H, grupo_W, grupo_X, grupo_Z].flatten.compact}
+    chave_vazia = '' # a nota para importação não possui chave, diferente da nota exporta.
+
+    @dados = {key: 'A', campos:['3.10',chave_vazia], grupos:[grupo_B, grupo_C, grupo_E, grupo_H, grupo_W, grupo_X, grupo_Z].flatten.compact}
   end
 
   def grupo_B

@@ -8,7 +8,7 @@ RSpec.describe ConversorTxt do
     let(:c){ConversorTxt.new(nota)}
     
     context 'Dado um TXT gerado pelo sistema distribuído pelo sebrae, versão X.Y' do
-      let(:conteudo_txt_original){file_fixture("joao/joao1/nota-txt-exportada.txt").read}
+      let(:conteudo_txt_original){file_fixture("joao/joao1/nota-txt-rascunho-para-importacao-no-programa.txt").read}
       let(:conversor){ConversorTxt.new}
       
       context 'depois do conteúdo do TXT ter sido interpretado' do
