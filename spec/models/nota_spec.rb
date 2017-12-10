@@ -52,15 +52,17 @@ RSpec.describe Nota, type: :model do
 
 
   describe '#to_txt', :txt do
-    let(:nota){create(:nota, planilha_itens: arquivo("#{input_dir}/planilha_itens.ods"))}
-    let(:txt_esperado){file_fixture("#{input_dir}/nota-txt-rascunho-para-importacao-no-programa.txt").read}
-    let(:txt_gerado_file){file_fixture("#{input_dir}/nota-txt-gerada-atualmente.txt").read}
+    let(:nota){create(:nota, planilha_itens: arquivo("joao/#{input_dir}/planilha_itens.ods"))}
+    let(:txt_esperado){file_fixture("joao/#{input_dir}/nota-txt-rascunho-para-importacao-no-programa.txt").read}
+    let(:temp_file_para_depuracao){"tmp/#{input_dir}-nota-txt-gerada-no-ultimo-teste.txt"}
+
+    before do
+      nota.calcula
+      IO.write(temp_file_para_depuracao, nota.to_txt) 
+    end
 
     context 'Quando invocado sobre uma nota com planilha calculada (ex: nota de joão)', :joao => 1 do
-      let(:input_dir){'joao/joao1'}
-      before do
-        nota.calcula
-      end
+      let(:input_dir){'joao1'}
       it 'exporta a nota para o format TXT' do
         expect(nota.to_txt).to eq(txt_esperado)
       end
@@ -68,12 +70,8 @@ RSpec.describe Nota, type: :model do
     end
 
     context 'Quando invocado sobre uma nota com planilha calculada (ex: nota2 de joão)', :joao => 2 do
-      let(:input_dir){'joao/joao2'}
-      before do
-        nota.calcula
-      end
+      let(:input_dir){'joao2'}
       it 'exporta a nota para o format TXT para importação como rascunho pelo sistema' do
-        #IO.write('nota.txt', nota.to_txt) 
         expect(nota.to_txt).to eq(txt_esperado)
       end
 
