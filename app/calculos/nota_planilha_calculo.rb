@@ -69,7 +69,7 @@ class NotaPlanilhaCalculo
   def ler_planilha_dados
     sheet = @planilha.sheet('Dados')
     hash = {}
-    cabecalhos = {'Câmbio' => 'cambio', 'TOTAL FRETE'=>'frete', 'TAXA DE UTILIZACAO DO SISCOMEX' => 'taxa_siscomex', 'S/REF' => 'S/REF', 'N/REF'=>'N/REF', 'DI'=>'DI', 'UF do emitente'=>'emitente_UF'}
+    cabecalhos = {'Câmbio' => 'cambio', 'TOTAL FRETE'=>'frete', 'TAXA DE UTILIZACAO DO SISCOMEX' => 'taxa_siscomex', 'DI'=>'DI', 'UF do emitente'=>'emitente_UF'}
     sheet.each do |linha|
       if cabecalhos.key? linha[0]
         key = cabecalhos[linha[0]]

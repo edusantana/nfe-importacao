@@ -38,7 +38,7 @@ RSpec.describe Nota, type: :model do
   end
   
   describe '#calcula' do
-    let(:nota){create(:nota, planilha_itens: arquivo('joao/planilha_itens.ods'))}
+    let(:nota){create(:nota, planilha_itens: arquivo('joao/joao1/planilha_itens.ods'))}
     context 'Depois que as planilhas foram inseridas' do
       before do
       end
