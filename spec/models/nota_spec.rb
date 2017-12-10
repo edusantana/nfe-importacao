@@ -19,7 +19,7 @@ RSpec.describe Nota, type: :model do
   describe '#planilha_itens' do
     let(:nota){create(:nota)}
     context 'Aceita planilha ods' do
-      let(:planilha){arquivo("joao/planilha_itens.ods")}
+      let(:planilha){arquivo("joao/joao1/planilha_itens.ods")}
       before do
         nota.planilha_itens = planilha
       end
@@ -28,7 +28,7 @@ RSpec.describe Nota, type: :model do
       end
     end
     context 'Não aceita planilha csv' do
-      let(:planilha){arquivo("joao/planilha_itens.csv")}
+      let(:planilha){arquivo("joao/joao1/planilha_itens.csv")}
       it 'retorna a planilha' do
         pending 'falta aprender a validar'
         nota.planilha_itens = planilha

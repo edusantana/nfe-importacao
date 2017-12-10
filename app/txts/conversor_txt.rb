@@ -76,7 +76,8 @@ class ConversorTxt
     ZZ - Informações da Assinatura Digital
 
 =end
-    chave_vazia = '' # importando como rascunho nao tem chave
+    chave_vazia = '' # a nota para importação não possui chave, diferente da nota exporta.
+
     @dados = {key: 'A', campos:['3.10',chave_vazia], grupos:[grupo_B, grupo_C, grupo_E, grupo_H, grupo_W, grupo_X, grupo_Z].flatten.compact}
   end
 
@@ -297,6 +298,7 @@ class ConversorTxt
   def grupo_P(item)
     # P|137.93|126.92|24.83|0.00|
     # P|vBC|vDespAdu|vII|vIOF|
+    # BC_ICMS_FINAL ?
     c = [item['BC_PIS_COFINS'], item['total_despesas_acessorias'], item['valor_II'], 0].map {|v| "%0.2f" % v}
     {key: 'P', campos: [c], grupos:[].flatten.compact}
   end

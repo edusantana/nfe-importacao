@@ -44,7 +44,7 @@ class NotaPlanilhaCalculo
     @planilha = Roo::Spreadsheet.open(nota.planilha_itens.path) 
     dados['totais'] = {}
     ler_itens
-    ler_planilha_extra
+    ler_planilha_dados
     ler_planilha_B
     ler_planilha_C
     ler_planilha_E
@@ -65,9 +65,9 @@ class NotaPlanilhaCalculo
     itens.delete_at(0)
     dados['itens'] = itens
   end
-  
-  def ler_planilha_extra
-    sheet = @planilha.sheet('Extra')
+
+  def ler_planilha_dados
+    sheet = @planilha.sheet('Dados')
     hash = {}
     cabecalhos = {'Câmbio' => 'cambio', 'TOTAL FRETE'=>'frete', 'TAXA DE UTILIZACAO DO SISCOMEX' => 'taxa_siscomex', 'S/REF' => 'S/REF', 'N/REF'=>'N/REF', 'DI'=>'DI', 'UF do emitente'=>'emitente_UF'}
     sheet.each do |linha|
