@@ -76,8 +76,8 @@ class ConversorTxt
     ZZ - Informações da Assinatura Digital
 
 =end
-    chave = @nota.dados['chave']
-    @dados = {key: 'A', campos:['3.10',"NFe#{chave}"], grupos:[grupo_B, grupo_C, grupo_E, grupo_H, grupo_W, grupo_X, grupo_Z].flatten.compact}
+    chave_vazia = '' # importando como rascunho nao tem chave
+    @dados = {key: 'A', campos:['3.10',chave_vazia], grupos:[grupo_B, grupo_C, grupo_E, grupo_H, grupo_W, grupo_X, grupo_Z].flatten.compact}
   end
 
   def grupo_B
@@ -445,7 +445,7 @@ class ConversorTxt
     cofins = number_to_currency(@nota.dados['totais']['valor_COFINS'], precision: 2)
     tus = number_to_currency(@nota.dados['totais']['despesas_acessorias'], precision: 2)
     
-    infCpl= ";S/REF: #{@nota.dados['S/REF']} N/REF: #{@nota.dados['N/REF']} DI: #{@nota.dados['DI']} PIS: #{pis} COFINS: #{cofins} TUS: #{tus}"
+    infCpl= "PIS: #{pis} COFINS: #{cofins} TUS: #{tus}"
     
     
     {key: 'Z', campos: [infAdFisco, infCpl] , grupos:[].flatten.compact}
