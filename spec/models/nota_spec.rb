@@ -63,8 +63,6 @@ RSpec.describe Nota, type: :model do
       end
 
     end
-<<<<<<< HEAD
-=======
 
     context 'Quando invocado sobre uma nota com planilha calculada (ex: nota2 de joão)', :wip do
       let(:nota){create(:nota, planilha_itens: arquivo('joao/joao2/planilha_itens.ods'))}
@@ -79,7 +77,6 @@ RSpec.describe Nota, type: :model do
 
     end
 
->>>>>>> bf14b4c... testes falhando
   end
 
 end
