@@ -256,14 +256,24 @@ class ConversorTxt
 
   def grupo_Ni(item,n)
     # assume: Tributação do ICMS - 90 – Outros
-    # N10h
-    # orig|CSOSN|modBC|vBC|pRedBC|pICMS|vICMS|modBCST|pMVAST|pRedBCST|vBCST|pICMSST|vICMSST|pCredSN|vCredICMSSN
-    #byebug
+      #byebug
+      #
+    case item['CSOSN']
+    when 102, 103, 300, 400
+      # N10d
+      # Grupo CRT=1 – Simples Nacional e CSOSN=102, 103, 300 ou 400
+      # Tributação do ICMS pelo SIMPLES NACIONAL e CSOSN=102, 103, 300 ou 400 (v.2.0)
+        key = 'N10d'
+        h = {orig: item['orig'], CSOSN: item['CSOSN']}        
+    when 900
+      # N10h
+      # orig|CSOSN|modBC|vBC|pRedBC|pICMS|vICMS|modBCST|pMVAST|pRedBCST|vBCST|pICMSST|vICMSST|pCredSN|vCredICMSSN
+      key = 'N10h'
+      h = {orig: item['orig'], CSOSN: item['CSOSN'], modBC: item['modBC'], vBC: '%0.2f' % item['BC_ICMS_FINAL'], pRedBC: '', 
+          pICMS: "%0.2f" % (item['ICMS']*100), vICMS: '%0.2f' % item['ICMS_final'], modBCST: '', pMVAST: '', pRedBCST: '', vBCST: '', pICMSST: '', vICMSST: '', pCredSN: '', vCredICMSSN: ''}
+    end
 
-    h = {orig: item['orig'], CSOSN: item['CSOSN'], modBC: item['modBC'], vBC: '%0.2f' % item['BC_ICMS_FINAL'], pRedBC: '',
-        pICMS: "%0.2f" % (item['ICMS']*100), vICMS: '%0.2f' % item['ICMS_final'], modBCST: '', pMVAST: '', pRedBCST: '', vBCST: '', pICMSST: '', vICMSST: '', pCredSN: '', vCredICMSSN: ''}
-
-    {key: 'N10h', campos: h.values, grupos:[].flatten.compact}
+    {key: key, campos: h.values, grupos:[].flatten.compact}
   end
 
   def grupo_O(item)

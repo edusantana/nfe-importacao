@@ -51,7 +51,7 @@ RSpec.describe Nota, type: :model do
   end
 
 
-  describe '#to_txt', :txt, :wip do
+  describe '#to_txt', :txt do
     context 'Quando invocado sobre uma nota com planilha calculada (ex: nota de joão)' do
       let(:nota){create(:nota, planilha_itens: arquivo('joao/planilha_itens.ods'))}
       let(:txt_esperado){file_fixture("joao/nota-txt-exportada.txt").read}
@@ -63,6 +63,23 @@ RSpec.describe Nota, type: :model do
       end
 
     end
+<<<<<<< HEAD
+=======
+
+    context 'Quando invocado sobre uma nota com planilha calculada (ex: nota2 de joão)', :wip do
+      let(:nota){create(:nota, planilha_itens: arquivo('joao/joao2/planilha_itens.ods'))}
+      let(:txt_esperado){file_fixture("joao/joao2/nota-txt-rascunho-para-importacao-no-programa.txt").read}
+      before do
+        nota.calcula
+      end
+      it 'exporta a nota para o format TXT para importação como rascunho pelo sistema' do
+        #IO.write('nota.txt', nota.to_txt) 
+        expect(nota.to_txt).to eq(txt_esperado)
+      end
+
+    end
+
+>>>>>>> bf14b4c... testes falhando
   end
 
 end
