@@ -59,6 +59,9 @@ class NotaPlanilhaCalculo
     sheet = @planilha.sheet('Itens')
 
     sheet.each(item: 'Item', II: 'II', :headers => true) do |hash|
+      hash['Preço'] = hash['Preço (Moeda estrageira)']
+      hash['uCom'] = hash['Unidade']
+      hash['uTrib'] = hash['Unidade']
       itens << hash
     end
 
@@ -121,6 +124,12 @@ class NotaPlanilhaCalculo
         hash[linha[0]] = linha[1]
       end
     end
+
+    # valores padrões
+    hash['tpViaTransp'] = '4'
+    hash['tpIntermedio'] = '1'
+    hash['nAdicao'] = 1
+    hash['nSeqAdicC'] = 1
     dados.merge!({'importacao' => hash})
   end
 

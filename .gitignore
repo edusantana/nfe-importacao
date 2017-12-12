@@ -21,3 +21,14 @@ public/system/
 
 \.~lock.*
 originais/
+
+spec/fixtures/files/exemplos-do-joao/notafiscal1.pdf
+spec/fixtures/files/exemplos-do-joao/notafiscal1.xls
+spec/fixtures/files/exemplos-do-joao/notafiscal2.pdf
+spec/fixtures/files/exemplos-do-joao/notafiscal2.xls
+spec/fixtures/files/exemplos-do-joao/notafiscal3.pdf
+spec/fixtures/files/exemplos-do-joao/notafiscal4.pdf
+spec/fixtures/files/exemplos-do-joao/notafiscal4.xls
+spec/fixtures/files/exemplos-do-joao/notafiscal5.pdf
+spec/fixtures/files/exemplos-do-joao/notafiscal5.xls
+

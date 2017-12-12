@@ -82,8 +82,58 @@ class ConversorTxt
   end
 
   def grupo_B
-    campos = 'cUF|cNF|natOp|indPag|mod|serie|nNF|dhEmi|dhSaiEnt|tpNF|idDest|cMunFG|tpImp|tpEmis|cDV|tpAmb|finNFe|indFinal|indPres|procEmi|verProc|dhCont|xJust'
-    {key: 'B', campos: ler_campos_da_nota('B', campos, @nota.dados), grupos:[]}
+    # campos = 'cUF|cNF|natOp|indPag|mod|serie|nNF|dhEmi|dhSaiEnt|tpNF|idDest|cMunFG|tpImp|tpEmis|cDV|tpAmb|finNFe|indFinal|indPres|procEmi|verProc|dhCont|xJust'
+
+    c = []
+
+    c << @nota.dados['B']['cUF']
+    #cNF
+    c << ''
+    #natOp
+    c << 'COMPRA PARA COMERCIALIZACAO'
+    #indPag
+    c << '0'
+    #mod
+    c << '55'
+    #serie
+    c << '1'
+    #nNF
+    c << '' # deixa ele por no programa
+    #dhEmi  2017-09-28T00:00:00-03:00
+    data = @nota.dados['B']['dhEmi']
+    c << data.strftime('%F') + 'T00:00:00-03:00'
+    #dhSaiEnt
+    c << ''
+    #tpNF
+    c << '0'
+    #idDest
+    c << '3'
+    #cMunFG
+    c << @nota.dados['B']['cMunFG']
+    # tpImp
+    c << '1'
+    # tpEmis
+    c << '1'
+    # cDV
+    c << ''
+    # tpAmb
+    c << '1'
+    # finNFe
+    c << '1'
+    # indFinal
+    c << '0'
+    # indPres
+    c << '2'
+    # procEmi
+    c << '3'
+    # verProc
+    c << '3.20.55'
+    # dhCont
+    c << ''
+    # xJust'
+    c << ''
+
+    {key: 'B', campos: c, grupos:[]}
   end
 
   def ler_campos_da_nota(chave, campos, hash)
@@ -96,28 +146,118 @@ class ConversorTxt
   end
 
   def grupo_C
-    campos = 'xNome|xFant|IE|IEST|IM|CNAE|CRT'
-    {key: 'C', campos: ler_campos_da_nota('C', campos, @nota.dados), grupos:[grupo_C02, grupo_C05].flatten.compact}
+    # xNome|xFant|IE|IEST|IM|CNAE|CRT
+    c = []
+    h = @nota.dados['C']
+    # xNome
+    c << h['xNome']
+    # xFant
+    c << h['xFant']
+    # IE
+    c << h['IE']
+    # IEST
+    c << ''
+    # IM
+    c << ''
+    # CNAE
+    c << ''
+    # CRT
+    c << h['CRT']
+
+    {key: 'C', campos: c, grupos:[grupo_C02, grupo_C05].flatten.compact}
   end
 
   def grupo_C02
-    campos = 'CNPJ'
-    {key: 'C02', campos: ler_campos_da_nota('C', campos, @nota.dados), grupos:[]}
+    h = @nota.dados['C']
+    c = []
+    c << h['CNPJ']
+
+    {key: 'C02', campos: c, grupos:[]}
   end
 
   def grupo_C05
-    campos = 'xLgr|nro|xCPL|xBairro|cMun|xMun|UF|CEP|cPais|xPais|fone'
-    {key: 'C05', campos: ler_campos_da_nota('C', campos, @nota.dados), grupos:[]}
+    # campos: 'xLgr|nro|xCPL|xBairro|cMun|xMun|UF|CEP|cPais|xPais|fone'
+    h = @nota.dados['C']
+    c = []
+    
+    # xLgr
+    c << h['xLgr']
+    # nro
+    c << h['nro']
+    # xCPL
+    c << h['xCPL']
+    # xBairro
+    c << h['xBairro']
+    # cMun
+    c << h['cMun']
+    # xMun
+    c << h['xMun']
+    # UF
+    c << h['UF']
+    # CEP
+    c << h['CEP']
+    # cPais
+    c << '1058'
+    # xPais
+    c << 'BRASIL'
+    # fone
+    c << h['fone']
+
+    {key: 'C05', campos: c, grupos:[]}
   end
 
   def grupo_E
-    campos = 'xNome|indIEDest|IE|ISUF|IM|email'
-    {key: 'E', campos: ler_campos_da_nota('E', campos, @nota.dados), grupos:[grupo_E05].flatten.compact}
+    # xNome|indIEDest|IE|ISUF|IM|email'
+    h = @nota.dados['E']
+    c = []
+    # xNome
+    c << h['xNome']
+    # indIEDest
+    c << '9'
+    # IE
+    c << ''
+    # ISUF
+    c << ''
+    # IM
+    c << ''
+    # email
+    c << ''
+
+    {key: 'E', campos: c, grupos:[grupo_E05].flatten.compact}
   end
 
   def grupo_E05
-    campos = 'xLgr|nro|xCpl|xBairro|cMun|xMun|UF|CEP|cPais|xPais|fone'
-    {key: 'E05', campos: ler_campos_da_nota('E', campos, @nota.dados), grupos:[].flatten.compact}
+    # campos = 'xLgr|nro|xCpl|xBairro|cMun|xMun|UF|CEP|cPais|xPais|fone'
+
+    h = @nota.dados['E']
+    c = []
+    
+    # xLgr
+    c << h['xLgr']
+    # nro
+    c << h['nro']
+    # xCpl
+    c << h['xCpl']
+    # xBairro
+    c << h['xBairro']
+    # cMun
+    c << '9999999'
+    # xMun
+    c << 'Exterior'
+    # UF
+    c << 'EX'
+    # CEP
+    c << h['CEP']
+    # cPais
+    c << h['cPais']
+    # xPais
+    c << h['xPais']
+    # fone
+    c << ''
+
+#    00000000
+    
+    {key: 'E05', campos: c, grupos:[].flatten.compact}
   end
 
   def grupo_H
@@ -143,7 +283,7 @@ class ConversorTxt
     c << item['Item'].truncate(120) 
 
     # cProd|cEAN|xProd| **NCM** |EXTIPI|CFOP|uCom|qCom|vUnCom|vProd|cEANTrib|uTrib|qTrib|vUnTrib|vFrete|vSeg|vDesc|vOutro|indTot|xPed|nItemPed|nFCI
-    c << nota.dados['NCM']
+    c << item['NCM']
     
     # EXTIPI|CFOP|uCom|qCom|vUnCom|vProd|cEANTrib|uTrib|qTrib|vUnTrib|vFrete|vSeg|vDesc|vOutro|indTot|xPed|nItemPed|nFCI
     # "EXTIPI"=>""
@@ -160,6 +300,8 @@ class ConversorTxt
     c << "%0.4f" % item['Quantidade'].to_f
     
     # "vUnCom"=>"15.8370000000", 
+    # Valor Unitário de Comercialização (**vUnCom**): Informar o valor unitário de comercialização do produto, campo meramente informativo, o contribuinte pode utilizar a precisão desejada (0-10 decimais). Para efeitos de cálculo, o valor unitário será obtido pela divisão do valor do produto pela quantidade comercial. (v2.0)
+    # FIXME: a planilha joao2 está com problema nesse campo.
     c << "%0.10f" % item['valor_unitario_real'].to_f
     
     # "vProd"=>"79.19", 
@@ -188,10 +330,10 @@ class ConversorTxt
     c << item['vDesc']
     
     # "vOutro"=>"68.17", 
-    c << item['total_despesas_sem_frete'].round(2)
+    c << "%0.2f" % item['total_despesas_sem_frete']
     
     # "indTot"=>"1", 
-    c << item['indTot'] # == '' ? @nota.dados['itens'].first('indTot') : item['indTot']
+    c << '1' # == '' ? @nota.dados['itens'].first('indTot') : item['indTot']
     #byebug
     
     # "xPed"=>nil, "nItemPed"=>nil, "nFCI"=>nil
@@ -266,11 +408,11 @@ class ConversorTxt
       # Tributação do ICMS pelo SIMPLES NACIONAL e CSOSN=102, 103, 300 ou 400 (v.2.0)
         key = 'N10d'
         h = {orig: item['orig'], CSOSN: item['CSOSN']}        
-    when 900
+    when 900, nil, '' # default
       # N10h
       # orig|CSOSN|modBC|vBC|pRedBC|pICMS|vICMS|modBCST|pMVAST|pRedBCST|vBCST|pICMSST|vICMSST|pCredSN|vCredICMSSN
       key = 'N10h'
-      h = {orig: item['orig'], CSOSN: item['CSOSN'], modBC: item['modBC'], vBC: '%0.2f' % item['BC_ICMS_FINAL'], pRedBC: '', 
+      h = {orig: 1, CSOSN: item['CSOSN'], modBC: 3, vBC: '%0.2f' % item['BC_ICMS_FINAL'], pRedBC: '', 
           pICMS: "%0.2f" % (item['ICMS']*100), vICMS: '%0.2f' % item['ICMS_final'], modBCST: '', pMVAST: '', pRedBCST: '', vBCST: '', pICMSST: '', vICMSST: '', pCredSN: '', vCredICMSSN: ''}
     end
 
@@ -299,7 +441,7 @@ class ConversorTxt
     # P|137.93|126.92|24.83|0.00|
     # P|vBC|vDespAdu|vII|vIOF|
     # BC_ICMS_FINAL ?
-    c = [item['BC_PIS_COFINS'], item['total_despesas_acessorias'], item['valor_II'], 0].map {|v| "%0.2f" % v}
+    c = [item['BC_PIS_COFINS'], item['despesas_acessorias'], item['valor_II'], 0].map {|v| "%0.2f" % v}
     {key: 'P', campos: [c], grupos:[].flatten.compact}
   end
 
@@ -405,6 +547,10 @@ class ConversorTxt
   end
 
   def grupo_W04
+    # Não entendo esse grupo.
+    # Quando ele deve está presente?
+    # De onde provém os valores?
+
 =begin
     -W04c|0.00|
     -W04e|0.00|
@@ -443,11 +589,12 @@ class ConversorTxt
   def grupo_Z
     # ;S/REF: FATURACOMERCIAL201713JBR N/REF: ABC55517DHL DI: 1716607959 PIS: R$ 82,26 COFINS: R$ 417,19 TUS: R$ 214,50
     infAdFisco = ''
+    di = nota.dados['importacao']['nDI']
     pis = number_to_currency(@nota.dados['totais']['valor_PIS'], precision: 2)
     cofins = number_to_currency(@nota.dados['totais']['valor_COFINS'], precision: 2)
     tus = number_to_currency(@nota.dados['totais']['despesas_acessorias'], precision: 2)
     
-    infCpl= "PIS: #{pis} COFINS: #{cofins} TUS: #{tus}"
+    infCpl= "DI: #{di} PIS: #{pis} COFINS: #{cofins} TUS: #{tus}"
     
     
     {key: 'Z', campos: [infAdFisco, infCpl] , grupos:[].flatten.compact}

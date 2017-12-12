@@ -74,6 +74,35 @@ RSpec.describe Nota, type: :model do
       it 'exporta a nota para o format TXT para importação como rascunho pelo sistema' do
         expect(nota.to_txt).to eq(txt_esperado)
       end
+    end
+
+    context 'Quando invocado sobre uma nota com planilha calculada (ex: nota3 de joão)', :joao => 3 do
+      let(:input_dir){'joao3'}
+      it 'exporta a nota para o format TXT para importação como rascunho pelo sistema' do
+        expect(nota.to_txt).to eq(txt_esperado)
+      end
+    end
+
+    context 'Quando nota contém uma planilha previamente calculada', :txt, :auto do
+      let(:nota){create(:nota, planilha_itens: arquivo("exemplos-do-joao/notafiscal#{n}-planilha.ods"))}
+      let(:txt_esperado){file_fixture("exemplos-do-joao/notafiscal#{n}-para-importar-como-rascunho.txt").read}
+      let(:temp_file_para_depuracao){"tmp/notafiscal-exemplos-do-joao#{n}-gerada-no-ultimo-teste.txt"}
+  
+      before do
+        nota.calcula
+        IO.write(temp_file_para_depuracao, nota.to_txt) 
+      end
+  
+      planilhas = [2] #5
+
+      planilhas.each do |n|
+        context "(planilha automobilística #{n})", :auto => n, joao: n do
+          let(:n){n}
+          it 'exporta a nota para o format TXT (que será posteriormente importado como rascunho pelo sistema de geração de notas)' do
+            expect(nota.to_txt).to eq(txt_esperado)
+          end
+        end
+      end
 
     end
 
