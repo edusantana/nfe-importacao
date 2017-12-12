@@ -98,7 +98,7 @@ class ConversorTxt
     #serie
     c << '1'
     #nNF
-    c << '' # deixa ele por no programa
+    c << @nota.dados['B']['nNF']
     #dhEmi  2017-09-28T00:00:00-03:00
     data = @nota.dados['B']['dhEmi']
     c << data.strftime('%F') + 'T00:00:00-03:00'
