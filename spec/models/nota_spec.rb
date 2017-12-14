@@ -93,7 +93,8 @@ RSpec.describe Nota, type: :model do
         IO.write(temp_file_para_depuracao, nota.to_txt) 
       end
   
-      planilhas = [2] #5
+      # planilhas = [2,5]
+      planilhas = [5]
 
       planilhas.each do |n|
         context "(planilha automobilística #{n})", :auto => n, joao: n do

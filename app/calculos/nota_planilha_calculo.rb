@@ -50,6 +50,7 @@ class NotaPlanilhaCalculo
     ler_planilha_E
     ler_planilha_I
     ler_planilha_Transporte
+    atualiza_valores_padroes
     
   end
   
@@ -72,7 +73,7 @@ class NotaPlanilhaCalculo
   def ler_planilha_dados
     sheet = @planilha.sheet('Dados')
     hash = {}
-    cabecalhos = {'Câmbio' => 'cambio', 'TOTAL FRETE'=>'frete', 'TAXA DE UTILIZACAO DO SISCOMEX' => 'taxa_siscomex', 'DI'=>'DI', 'UF do emitente'=>'emitente_UF'}
+    cabecalhos = {'Câmbio' => 'cambio', 'TOTAL FRETE'=>'frete', 'TAXA DE UTILIZACAO DO SISCOMEX' => 'taxa_siscomex', 'DI'=>'DI', 'UF do emitente'=>'emitente_UF', 'Atuações e outras despesas'=>'outras_despesas'}
     sheet.each do |linha|
       if cabecalhos.key? linha[0]
         key = cabecalhos[linha[0]]
@@ -88,7 +89,7 @@ class NotaPlanilhaCalculo
     sheet = @planilha.sheet('B')
     hash = {}
     sheet.each do |linha|
-      hash[linha[0]] = linha[1]
+      hash[linha[0]] = linha[2]
     end
     dados.merge!({'B' => hash})
   end
@@ -97,7 +98,7 @@ class NotaPlanilhaCalculo
     sheet = @planilha.sheet('C')
     hash = {}
     sheet.each do |linha|
-      hash[linha[0]] = linha[1]
+      hash[linha[0]] = linha[2]
     end
     dados.merge!({'C' => hash})
   end
@@ -107,7 +108,7 @@ class NotaPlanilhaCalculo
     sheet = @planilha.sheet('E')
     hash = {}
     sheet.each do |linha|
-      hash[linha[0]] = linha[1]
+      hash[linha[0]] = linha[2]
     end
     dados.merge!({'E' => hash})
   end
@@ -115,17 +116,19 @@ class NotaPlanilhaCalculo
   def ler_planilha_I
     sheet = @planilha.sheet('I')
     hash = {}
+    camposI = ("cProd|cEAN|xProd|NCM|EXTIPI|CFOP|uCom|qCom|vUnCom|vProd|cEANTrib|uTrib|qTrib|vUnTrib|vFrete|vSeg|vDesc|vOutro|indTot|xPed|nItemPed|nFCI".split '|')
+    camposI18 = ("nDI|dDI|xLocDesemb|UFDesemb|dDesemb|tpViaTransp|vAFRMM|tpIntermedio|CNPJ|UFTerceiro|cExportador".split '|')
+    camposI25 = ("nAdicao|nSeqAdicC|cFabricante|vDescDI|nDraw".split '|')
+    taxas = ['II', 'IPI', 'PIS', 'COFINS', 'ICMS']
+    campos = camposI + camposI18 + camposI25 + taxas
     sheet.each do |linha|
-      camposI18 = ("nDI|dDI|xLocDesemb|UFDesemb|dDesemb|tpViaTransp|vAFRMM|tpIntermedio|CNPJ|UFTerceiro|cExportador".split '|')
-      camposI25 = ("nAdicao|nSeqAdicC|cFabricante|vDescDI|nDraw".split '|')
-      campos = camposI18 + camposI25
-
       if campos.include? linha[0]
-        hash[linha[0]] = linha[1]
+        hash[linha[0]] = linha[2]
       end
     end
 
     # valores padrões
+    # FIXME: não pode sobrescrever os dados lidos
     hash['tpViaTransp'] = '4'
     hash['tpIntermedio'] = '1'
     hash['nAdicao'] = 1
@@ -136,12 +139,21 @@ class NotaPlanilhaCalculo
   def ler_planilha_Transporte
     sheet = @planilha.sheet('Transporte')
     hash = {'modFrete' => sheet.a2, 'transportes' => []}
-    headers = 'modFrete','qVol','esp','marca','nVol', 'pesoL','pesoB'
+    headers = 'modFrete','qVol','esp','marca','nVol', 'pesoB','pesoL'
     sheet.each do |linha|
       hash['transportes'] << Hash[headers.zip linha]
     end
     hash['transportes'].shift # descarta cabeçalho
+    hash['transportes'].shift # descarta cabeçalho descritivo
     dados.merge!({'transporte' => hash})    
+  end
+
+  def atualiza_valores_padroes
+    taxas = ['II', 'IPI', 'PIS', 'COFINS', 'ICMS']
+    valores_padroes = dados['importacao'].select {|k,v| taxas.include?(k)}
+    @dados['itens'].each do |item|
+      valores_padroes.each {|k,v| item[k] ||= v}
+    end
   end
 
   def calcula_valor_aduaneiro_em_modea_estrangeira
@@ -280,7 +292,7 @@ class NotaPlanilhaCalculo
 
   def calcula_despesas_acessorias
     key = 'despesas_acessorias'
-    total = dados['taxa_siscomex']
+    total = dados['taxa_siscomex'] + dados['outras_despesas']
     dados['itens'].each do |item|
       valor = total*item['rateio_despesas_acessorias']
       item[key] = valor
