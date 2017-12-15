@@ -1,5 +1,7 @@
 require 'rails_helper'
 require 'fileutils'
+require 'roo'
+
 
 
 RSpec.describe NotaPlanilhaCalculo do
@@ -152,7 +154,11 @@ RSpec.describe NotaPlanilhaCalculo do
       end
 
       context 'tomando a planilha 5 de joão como exemplo', :calculo => :auto5 do
+        let(:base){ Roo::Spreadsheet.open('spec/fixtures/files/exemplos-do-joao/notafiscal5.xlsx')} # base
         let(:nota){create(:nota, planilha_itens: arquivo('exemplos-do-joao/notafiscal5-planilha.ods'))}
+        let(:n){19}
+        let(:offset){9} # deslocamento na base original
+
         it 'calcula os valores para nota fiscal baseados na planilha e retorna em um hash' do
           dados = c.calcula
           expect(dados).not_to be_empty
@@ -166,10 +172,16 @@ RSpec.describe NotaPlanilhaCalculo do
 
           expect(dados['itens'][0]['valor_aduaneiro_em_modea_estrangeira']).to eq(16.05)
           expect(dados['itens'][12]['valor_aduaneiro_em_modea_estrangeira']).to eq(69)
+          
+          chave = 'valor_aduaneiro_em_modea_estrangeira'
+          expect(dados['itens'][0][chave]).to eq(base.e10)
+          expect(dados['itens'][12][chave]).to eq(base.e22)
 
           expect(dados['totais']['valor_aduaneiro_em_modea_estrangeira']).to be_within(0.01).of(725.90)
+          expect(dados['totais']['valor_aduaneiro_em_modea_estrangeira']).to be_within(0.01).of(base.e39)
 
           expect(dados['cambio']).to eq(3.1572)
+          expect(dados['cambio']).to eq(base.f4)
 
           expect(dados['itens'][0]['valor_aduaneiro_em_reais']).to be_within(0.01).of(50.67)
           expect(dados['itens'][12]['valor_aduaneiro_em_reais']).to be_within(0.01).of(217.85)

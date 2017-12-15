@@ -73,7 +73,10 @@ class NotaPlanilhaCalculo
   def ler_planilha_dados
     sheet = @planilha.sheet('Dados')
     hash = {}
-    cabecalhos = {'Câmbio' => 'cambio', 'TOTAL FRETE'=>'frete', 'TAXA DE UTILIZACAO DO SISCOMEX' => 'taxa_siscomex', 'DI'=>'DI', 'UF do emitente'=>'emitente_UF', 'Atuações e outras despesas'=>'outras_despesas'}
+    cabecalhos = {'Câmbio' => 'cambio', 'TOTAL FRETE'=>'frete', 'TAXA DE UTILIZACAO DO SISCOMEX' => 'taxa_siscomex', 'DI'=>'DI', 'UF do emitente'=>'emitente_UF', 'Atuações e outras despesas'=>'outras_despesas' }
+
+    # 'N/REF' => 'N/REF', 'S/REF' => 'S/REF'
+            
     sheet.each do |linha|
       if cabecalhos.key? linha[0]
         key = cabecalhos[linha[0]]
@@ -117,10 +120,12 @@ class NotaPlanilhaCalculo
     sheet = @planilha.sheet('I')
     hash = {}
     camposI = ("cProd|cEAN|xProd|NCM|EXTIPI|CFOP|uCom|qCom|vUnCom|vProd|cEANTrib|uTrib|qTrib|vUnTrib|vFrete|vSeg|vDesc|vOutro|indTot|xPed|nItemPed|nFCI".split '|')
+    camposI05c = ("CEST".split '|')
     camposI18 = ("nDI|dDI|xLocDesemb|UFDesemb|dDesemb|tpViaTransp|vAFRMM|tpIntermedio|CNPJ|UFTerceiro|cExportador".split '|')
     camposI25 = ("nAdicao|nSeqAdicC|cFabricante|vDescDI|nDraw".split '|')
+    camposN10 = ("CSOSN".split '|')
     taxas = ['II', 'IPI', 'PIS', 'COFINS', 'ICMS']
-    campos = camposI + camposI18 + camposI25 + taxas
+    campos = camposI + camposI05c + camposI18 + camposI25 + camposN10 + taxas
     sheet.each do |linha|
       if campos.include? linha[0]
         hash[linha[0]] = linha[2]
@@ -149,7 +154,7 @@ class NotaPlanilhaCalculo
   end
 
   def atualiza_valores_padroes
-    taxas = ['II', 'IPI', 'PIS', 'COFINS', 'ICMS']
+    taxas = ['II', 'IPI', 'PIS', 'COFINS', 'ICMS', 'CSOSN', 'CEST']
     valores_padroes = dados['importacao'].select {|k,v| taxas.include?(k)}
     @dados['itens'].each do |item|
       valores_padroes.each {|k,v| item[k] ||= v}

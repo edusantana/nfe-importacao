@@ -6,6 +6,15 @@ class ConversorTxt
   
   attr_reader :nota  
   attr_reader :dados
+
+  CAMPOS_TXT = {
+    '3.1.0' => {
+      'B' => 'cUF|cNF|natOp|indPag|mod|serie|nNF|dhEmi|dhSaiEnt|tpNF|idDest|cMunFG|tpImp|tpEmis|cDV|tpAmb|finNFe|indFinal|indPres|procEmi|verProc|dhCont|xJust'.split('|')
+      },
+    '3.10.1'=> {
+      'B' => 'cUF|cNF|natOp|indPag|mod|serie|nNF|dhEmi|dhSaiEnt|tpNF|idDest|cMunFG|tpImp|tpEmis|cDV|tpAmb|finNFe|indFinal|indPres|procEmi|verProc|dhCont|xJust'.split('|')
+    }    
+  }
     
   def initialize(nota=nil)
     
@@ -14,6 +23,29 @@ class ConversorTxt
     @nota = nota
     
     # @d = JSON.parse(nota.dados.to_json,object_class: OpenStruct)
+  end
+
+  def self.campos_txt(conteudo_txt, versao=nil)
+    result = {}
+    versoes = versao.nil??  CAMPOS_TXT.keys : [versao]
+    conteudo_txt.each_line do |linha|
+      valores = linha.split('|', -1) # não remove empty string
+      grupo = valores.shift
+
+      versoes.each do |versao|
+        campos = CAMPOS_TXT[versao][grupo]
+        hash = Hash[campos.zip valores]
+        if result[versao]
+          result[versao] << {grupo => hash}
+        else
+          result[versao] = [{grupo => hash}]
+        end
+      end
+
+
+
+    end
+    result
   end
   
   def interpreta_conteudo_txt(conteudo_txt)
@@ -280,10 +312,10 @@ class ConversorTxt
     # TXT:
     # I|0000||OBL-12-01-01 - ACABAMENTO AUTOMOTIVO DA GRADE DIANTEIRA, LADO ESQUERDO E DIREITO EM PLASTICO ABS CROMADO COMPATIVEL C...|87082999||3102|PAR|5.0000|15.8370000000|79.19||PAR|5.0000|15.8370000000|58.75|||68.17|1||||
 
-    c << item['Item'].truncate(120) 
+    c << item['Item'].truncate(120)
 
     # cProd|cEAN|xProd| **NCM** |EXTIPI|CFOP|uCom|qCom|vUnCom|vProd|cEANTrib|uTrib|qTrib|vUnTrib|vFrete|vSeg|vDesc|vOutro|indTot|xPed|nItemPed|nFCI
-    c << item['NCM']
+    c << (item['NCM'] || @nota.dados['importacao']['NCM'])
     
     # EXTIPI|CFOP|uCom|qCom|vUnCom|vProd|cEANTrib|uTrib|qTrib|vUnTrib|vFrete|vSeg|vDesc|vOutro|indTot|xPed|nItemPed|nFCI
     # "EXTIPI"=>""
@@ -291,7 +323,7 @@ class ConversorTxt
     c << item['EXTIPI']
 
     #  "CFOP"=>"3102", 
-    c << item['CFOP']
+    c << (item['CFOP'] || @nota.dados['importacao']['CFOP'])
 
     # "uCom"=>"PAR", 
     c << item['uCom'].truncate(6, omission: '')
@@ -359,9 +391,10 @@ class ConversorTxt
   def grupo_I05c(item)
     #[0 ou 1]{
     #I05c|CEST
+    #byebug
 
 
-    cest = item['CEST']
+    cest = item['CEST'] ||  @nota.dados['importacao']['CEST']
     if cest.nil? || cest == ''
       return []
     else
@@ -589,12 +622,14 @@ class ConversorTxt
   def grupo_Z
     # ;S/REF: FATURACOMERCIAL201713JBR N/REF: ABC55517DHL DI: 1716607959 PIS: R$ 82,26 COFINS: R$ 417,19 TUS: R$ 214,50
     infAdFisco = ''
+    s_ref = nota.dados['S/REF']
+    n_ref = nota.dados['N/REF']
     di = nota.dados['importacao']['nDI']
     pis = number_to_currency(@nota.dados['totais']['valor_PIS'], precision: 2)
     cofins = number_to_currency(@nota.dados['totais']['valor_COFINS'], precision: 2)
     tus = number_to_currency(@nota.dados['totais']['despesas_acessorias'], precision: 2)
     
-    infCpl= "DI: #{di} PIS: #{pis} COFINS: #{cofins} TUS: #{tus}"
+    infCpl= ";S/REF: #{s_ref} N/REF: #{n_ref} DI: #{di} PIS: #{pis} COFINS: #{cofins} TUS: #{tus}"
     
     
     {key: 'Z', campos: [infAdFisco, infCpl] , grupos:[].flatten.compact}

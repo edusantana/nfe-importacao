@@ -97,7 +97,7 @@ RSpec.describe Nota, type: :model do
       planilhas = [5]
 
       planilhas.each do |n|
-        context "(planilha automobilística #{n})", :auto => n, joao: n do
+        context "(planilha automobilística #{n})", :txt => "auto#{n}", joao: n do
           let(:n){n}
           it 'exporta a nota para o format TXT (que será posteriormente importado como rascunho pelo sistema de geração de notas)' do
             expect(nota.to_txt).to eq(txt_esperado)
