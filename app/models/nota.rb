@@ -14,6 +14,8 @@ class Nota < ApplicationRecord
   end
   
   def to_txt
+    raise RuntimeError, 'Nota ainda não possui planilha' unless planilha_itens.present?
+    raise RuntimeError, 'Você deve invocar #calcula antes de tentar gerar o txt' if dados.nil?
 
     conversor = ConversorTxt.new(self)
     conversor.converte_para_txt

@@ -15,6 +15,7 @@ class NotasController < ApplicationController
   # Retorna txt da nota
   # GET /notas/1/download_txt
   def download_txt
+    @nota.calcula
     send_data @nota.to_txt, type: 'text/plain', filename: "nota-fiscal-#{@nota.id}.txt"
   end
 

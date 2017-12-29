@@ -31,14 +31,13 @@ RSpec.feature "Notas", type: :feature do
     end
 
     scenario 'Exportar TXT da nota' do
-      pending 'Aguardando conversão funcionar'
       quando_usuario_estiver_na_pagina_de_notas
       e_clicar_em_criar_nota
       e_preencher_titulo_da_nota
-      e_anexar_planilha
+      e_anexar_planilha_com_dados_validos
       e_salvar_nota
       e_clicar_para_exportar_para_txt
-      #entao_um_arquivo_txt_foi_enviado
+      entao_um_arquivo_txt_foi_enviado
       # incrementou quantidade de txts gerados
     end
   end
@@ -79,7 +78,11 @@ RSpec.feature "Notas", type: :feature do
   end
 
   def e_anexar_planilha
-    attach_file 'nota[planilha_itens]', arquivo_path('joao/joao1/itens-joao.xls')
+    attach_file 'nota[planilha_itens]', arquivo_path('exemplos-do-joao/notafiscal5-planilha.ods')
+  end
+
+  def e_anexar_planilha_com_dados_validos
+    attach_file 'nota[planilha_itens]', arquivo_path('exemplos-do-joao/notafiscal5-planilha.ods')
   end
 
   def entao_a_nota_foi_salva
@@ -90,6 +93,11 @@ RSpec.feature "Notas", type: :feature do
 
   def e_salvar_nota
     click_on('Salvar')
+  end
+
+  def entao_um_arquivo_txt_foi_enviado
+    #expect(response.header['Content-Type']).to eq('text/plain')
+    expect(page).to have_content 'NOTAFISCAL|1'
   end
 
 end
