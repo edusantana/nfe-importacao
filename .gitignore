@@ -32,3 +32,8 @@ spec/fixtures/files/exemplos-do-joao/notafiscal4.xls
 spec/fixtures/files/exemplos-do-joao/notafiscal5.pdf
 spec/fixtures/files/exemplos-do-joao/notafiscal5.xls
 
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
